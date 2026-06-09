@@ -1,0 +1,37 @@
+<?php
+echo "<!DOCTYPE html>";
+echo "<html><head>";
+echo "<meta name='viewport' content='width=device-width, initial-scale=1'>";
+echo "<meta charset='utf8'>";
+echo "<title>";
+echo getSystemValue('systemName')." - ".$user['usrFullName'];
+echo "</title>";
+echo "<style>";
+echo "body{font-family: Arial, Helvetica, sans-serif; margin: 0; direction: rtl;}";
+echo ".navbar {	overflow: hidden; background-color: " . $colors['topBarBG'] . ";}";
+echo ".navbar a {float: right; font-size: 16px; color: " . $colors['topBarFG'] . "; text-align: center; padding: 14px 16px; text-decoration: none;}";
+echo ".subnav {float: right; overflow: hidden;}";
+echo ".subnav .subnavbtn {font-size: 16px; border: none; outline: none; color: " . $colors['topBarFG'] . "; padding: 14px 16px; background-color: inherit; font-family: inherit; margin: 0;}";
+echo ".navbar a:hover, .subnav:hover .subnavbtn {background-color: " . $colors['topBarActiveBG'] . "; color: " . $colors['topBarActiveFG'] . "}";
+echo ".subnav-content {display: none; position: absolute; left: 0; background-color: " . $colors['menuBarBG'] . "; width: 100%; z-index: 1;}";
+echo ".subnav-content a {float: right; color: " . $colors['menuBarFG'] . "; text-decoration: none;}";
+echo ".subnav-content a:hover {background-color: #eee; color: black;}";
+echo ".subnav:hover .subnav-content {display: block;}";
+echo ".dropdown {float: right;overflow: hidden;}";
+echo ".dropbtn {font-size: 16px; border: none; outline: none; color: " . $colors['menuBarFG'] . "; padding: 14px 16px; background-color: inherit; font-family: inherit; margin: 0;}";
+echo ".dropdown:hover .dropbtn {background-color: " . $colors['menuBarActiveBG'] . " ;color: " . $colors['menuBarActiveFG'] . ";}";
+echo ".dropdown-content {display: none; position: absolute;	background-color: " . $colors['dropdownBG'] . "; min-width: 120px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;}";
+echo ".dropdown-content a {float: none;	color: " . $colors['dropdownFG'] . "; padding: 15px 16px; text-decoration: none; display: block; text-align: right;}";
+echo ".dropdown-content a:hover {background-color: " . $colors['dropdownActiveBG'] . "; color: " . $colors['dropdownActiveFG'] . "}";
+echo ".dropdown:hover .dropdown-content {display: block;}";
+echo "</style>";
+echo "<script>";
+echo "function calcContentSize(){";
+echo "    var x=window.innerWidth;";
+echo "    var y=window.innerHeight;";
+echo "    document.getElementById('content').width=x-5;";
+echo "    document.getElementById('content').height=y-95;";
+echo "}";
+echo "</script>";
+echo "</head>";
+?>

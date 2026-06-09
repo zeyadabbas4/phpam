@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ar">
+    <head>
+        <meta charset="utf8">
+        <title>Basic Studies Lecturer Report</title>
+        <style>
+            * {
+                box-sizing: border-box
+            }
+            body{
+                margin: 0;
+                text-align: center;
+                font-family: 'Times New Roman', Times, serif;
+                direction: rtl;
+            }
+            .mainDoc{
+                width: 19cm;
+                height: 27cm;
+                margin: auto;
+            }
+            .headerTable{
+                width: 90%;
+                margin: auto;
+            }
+            .aastLogo{
+                width: 2cm;
+            }
+            .aastLogo img{
+                width: 100%;
+            }
+            .ptiLogo{
+                width: 2cm;
+            }
+            .ptiLogo img{
+                width: 90%;
+            }
+            .pageTitle{
+                font-weight: bold;
+                font-size: large;
+            }
+            .pageSubtitle{
+                font-weight: bold;
+                font-size: small;
+            }            
+            .mainTable{
+                width: 95%;
+                border-style: solid;
+                border-color: black;
+                border-width: 1px;
+                border-collapse: collapse;
+                margin: auto;
+            }
+            .mainTable th{
+                border-style: solid;
+                border-color: black;
+                border-width: 1px;
+                padding: 3px;
+                font-size: small;
+            }
+            .mainTable td{
+                border-style: solid;
+                border-color: black;
+                border-width: 1px;
+                padding: 3px;
+                font-size: medium;
+            }
+            .supervisorCell{
+                text-align: right;
+            }
+            .DocumentDate{
+                text-align: right;
+            }
+            .opinions{
+                font-size: Medium;
+            }
+            .signatures{
+                margin: auto;
+                width: 90%;
+            }
+            .signatures td{
+                font-size: medium;
+            }
+            .iso{
+                margin: auto;
+                width:100%;
+            }
+            .isoVersion{
+                text-align: right;
+                font-size: small;
+            }
+            .isoCode{
+                direction: ltr;
+                text-align: left;
+                font-size: small;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="mainDoc">
+            <table class="headerTable">
+                <tr>
+                    <td class="aastLogo"><img src="img/aastmt.png"></td>
+                    <td class="pageTitle">
+                        اﻷكاديمية العربية للعلوم والتكنولوجيا والنقل البحري<br>
+                        معهد تدريب الموانئ
+                    </td>
+                    <td class="ptiLogo"><img src="img/pti.png"></td>
+                </tr>
+            </table>
+            <p class="pageTitle">الدراسات اﻷساسية للبحارة</p>
+            <p class="pageSubtitle">ساعات المحاضرين من $crprFrom حتى $crprTo</p>
+            <p class="pageSubtitle">$YearDesc</p>
+            <p class="pageSubtitle">إجمالي ساعات $crprDescription $CoursDescription</p>
+
+            <p class="DocumentDate">$date</p>
+            <table class="mainTable">
+                <tr>
+                    <th rowspan="2">م</th>
+                    <th rowspan="2">اسم المحاضر/المدرب</th>
+                    <th rowspan="2">نظري</th>
+                    <th rowspan="2">عملي</th>
+                    <th rowspan="2">إجمالي<br>الساعات</th>
+                    <th rowspan="2">توقيع<br>المحاضر</th>
+                    <th colspan="2">الفئة</th>
+                    <th colspan="2">أخرى</th>
+                    <th colspan="2">المبلغ<br>المستحق</th>
+                </tr>
+                <tr>
+                    <th>نظري</th>
+                    <th>عملي</th>
+                    <th>بدل سفر</th>
+                    <th>انتقالات</th>
+                    <th>قرش</th>
+                    <th>جنيه</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="10" class="supervisorCell">جهة اﻹشراف:<br><br></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="10">اﻹجمالي</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <br><br>
+            <p class="opinions">رأي مشرف الدورة :- ............................................................................. التوقيع :- .....................</p>
+            <p class="opinions">رأي رئيس قسم الدورة :- ........................................................................ التوقيع :- .....................</p>
+            <br><br>
+            <table class="signatures">
+                <tr>
+                    <td>مسئول التسجيل</td>
+                    <td>رئيس القسم</td>
+                    <td>مدير إدارة التعليم</td>
+                    <td>التخطيط</td>
+                    <td>الموارد البشرية</td>
+                    <td>المراجعة</td>
+                    <td>المدير المالي</td>
+                    <td>عميد المعهد</td>
+                </tr>
+            </table>
+            <br><br><br><br><br><br>
+            <table class="iso">
+                <tr>
+                    <td class="isoVersion">إصدار:- () بتاريخ 000/00/0<br>تعديل:- () بتاريخ 000/00/0</td>
+                    <td class="isoCode">F-IPM-(13)#6</td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

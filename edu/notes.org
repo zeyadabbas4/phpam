@@ -1,0 +1,10 @@
+#+title: Notes
+
+* SQL
+** SQL for status
+: SELECT  CoursId,CoursStatus,crprStatus,crprId FROM Courses
+left JOIN  coursPeriods on CoursId=crprCourseId
+WHERE CoursType=2
+AND   CoursYear= 13
+AND   CoursStatus >=2
+or   CoursId IN (select crprCourseId from coursPeriods where  crprStatus >=2)
