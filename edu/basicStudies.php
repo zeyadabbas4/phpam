@@ -403,16 +403,17 @@ if($mode=="saveeditPeriod"){
 //sec:saveadd Save added batch
 //*****************************************************************************************
 	if($mode=="saveadd"){
-		$q="INSERT INTO Years(YearDesc,Yearstart,YearEnd,YearType) VALUES(?,?,?,'B')";
-		if ($stmt = mysqli_prepare($dbc, $q)){
-			if(mysqli_stmt_bind_param($stmt,"sss",$YearDesc,$Yearstart,$YearEnd)){
-				if(mysqli_stmt_execute($stmt)){
-					$message="تم الحفظ!...";
-				}    
+	$q="INSERT INTO Years(YearDesc,Yearstart,YearEnd,YearType) VALUES(?,?,?,'B')";
+	if ($stmt = mysqli_prepare($dbc, $q)){
+		if(mysqli_stmt_bind_param($stmt,"sss",$YearDesc,$Yearstart,$YearEnd)){
+			if(mysqli_stmt_execute($stmt)){
+				$message="تم الحفظ!...";
+				$YearId = mysqli_insert_id($dbc); // capture generated ID
 			}
-			mysqli_stmt_close($stmt);
 		}
+		mysqli_stmt_close($stmt);
 	}
+}
 	
 //*****************************************************************************************
 //sec:saveaddClass Save added Class

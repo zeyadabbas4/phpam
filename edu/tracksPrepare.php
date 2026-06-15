@@ -336,7 +336,7 @@ if(($mode == "studentAdmission") or ($mode == "addStudent2Batch") or ($mode == "
 $PrgName = $PrgName ?? '';
 $YearDesc = $YearDesc ?? '';
 
-if($mode=="edit" or $mode=="view" or $mode=="deleteConfirm" or $mode=="batchList" or $mode=="viewBatch" or $mode =="addBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode == "addSemester" or $mode == "editSemester" or $mode == "ManageSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester" or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore"){
+if($mode=="edit" or $mode=="view" or $mode=="deleteConfirm" or $mode=="batchList" or $mode=="viewBatch" or $mode =="addBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode == "addSemester" or $mode == "editSemester" or $mode == "ManageSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester" or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="addStudentCourse" or $mode=="saveStudentCourse"){
     $q="SELECT PrgCode,PrgName,PrgId  FROM Programs  WHERE PrgId =?";
     if($stmt=mysqli_prepare($dbc, $q)){
         if(mysqli_stmt_bind_param($stmt, "i", $PrgId )){
@@ -355,7 +355,7 @@ if($mode=="edit" or $mode=="view" or $mode=="deleteConfirm" or $mode=="batchList
 //*****************************************************************************************
 //sec:edit-view-deleteConfirm read a record for view or edit Batch
 //*****************************************************************************************
-if($mode=="viewBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="ManageSemester" or $mode == "addSemester" or $mode == "editSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester"  or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish"){
+if($mode=="viewBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="ManageSemester" or $mode == "addSemester" or $mode == "editSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester"  or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode=="addStudentCourse" or $mode=="saveStudentCourse"){
     $q="SELECT `YearDesc`,`YearStart`,`YearEnd` FROM `Years` WHERE `YearId`=?";
     if($stmt=mysqli_prepare($dbc, $q)){
         if(mysqli_stmt_bind_param($stmt, "i", $YearId)){
@@ -563,7 +563,7 @@ if ($mode == "addStudent2Batch"){
         }
         mysqli_stmt_close($stmt);
       }
-	  $mode="studentAdmission";	
+	  $mode = "addStudent2Batch";	
 	
 }
 
@@ -592,6 +592,135 @@ if ($mode == "removeStudentFromBatch"){
 	  $mode="studentAdmission";	
 	
 }
+
+//*****************************************************************************************
+//sec:Save a manually added student course
+//*****************************************************************************************
+if ($mode == "saveStudentCourse") {
+	$errorMessage = "";
+	if (empty($StId))   $errorMessage .= "يجب اختيار الطالب<br>";
+	if (empty($CrsId))  $errorMessage .= "يجب اختيار المادة<br>";
+	if (empty($Semester) || !is_numeric($Semester)) $errorMessage .= "يجب إدخال رقم الفصل الدراسي<br>";
+
+	if ($errorMessage != "") {
+		$mode = "addStudentCourse";
+	} else {
+		$q = "INSERT IGNORE INTO programstudentscourses (StId, PrgId, YearId, CrsId, Semester) VALUES (?, ?, ?, ?, ?)";
+		if ($stmt = mysqli_prepare($dbc, $q)) {
+			if (mysqli_stmt_bind_param($stmt, "iiiii", $StId, $PrgId, $YearId, $CrsId, $Semester)) {
+				if (mysqli_stmt_execute($stmt)) {
+					if (mysqli_stmt_affected_rows($stmt) > 0) {
+						$infoMessage = "تمت الإضافة بنجاح!";
+						// Clear the form fields on success
+						$StId = "";
+						$CrsId = "";
+						$Semester = "";
+					} else {
+						$errorMessage = "الطالب مسجل في هذه المادة مسبقاً!";
+					}
+				} else {
+					$errorMessage = "لم يتم الحفظ: " . mysqli_error($dbc);
+				}
+			}
+			mysqli_stmt_close($stmt);
+		}
+		$mode = "addStudentCourse";
+	}
+}
+
+//*****************************************************************************************
+//sec:Add a course for a specific student manually
+//*****************************************************************************************
+if ($mode == "addStudentCourse") {
+	if(isset($errorMessage) && $errorMessage != ""){
+		echo "<div class='errorMessages'>$errorMessage</div><br>";
+	}
+	if(isset($infoMessage) && $infoMessage != ""){
+		if ($infoMessage == "تمت الإضافة بنجاح!") {
+			echo "
+			<div id='successPopup' style='position:fixed; top:20px; left:50%; transform:translateX(-50%); background-color:#4CAF50; color:white; padding:15px 30px; border-radius:5px; font-size:18px; font-weight:bold; z-index:9999; box-shadow: 0 4px 8px rgba(0,0,0,0.2); direction:rtl; text-align:center;'>
+				تمت الإضافة بنجاح!
+			</div>
+			<script>
+				setTimeout(function() {
+					var popup = document.getElementById('successPopup');
+					if (popup) {
+						popup.style.transition = 'opacity 0.3s ease';
+						popup.style.opacity = '0';
+						setTimeout(function() {
+							popup.parentNode.removeChild(popup);
+						}, 300);
+					}
+				}, 1000);
+			</script>
+			";
+		} else {
+			echo "<div class='infoMessages'>$infoMessage</div><br>";
+		}
+	}
+
+	echo "<center>";
+	echo "<h3>اضافة مادة لطالب - $PrgName - $YearDesc</h3>";
+	echo "<form method='post' style='max-width:700px;margin:auto;direction:rtl;'>";
+	echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+	echo "<input type='hidden' name='YearId' value='$YearId'>";
+	echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+	echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+	echo "<table width='100%'>";
+
+	// Student dropdown - only students enrolled in this batch
+	$qq_st = "SELECT Students.StID, Students.StName FROM Students INNER JOIN ProgramStudents ON Students.StID = ProgramStudents.StID WHERE ProgramStudents.PrgId=? AND ProgramStudents.YearId=? ORDER BY Students.StName";
+	echo "<tr><td style='width:200px;'>الطالب:</td><td><div class='input-container'>";
+	echo "<select class='input-field' name='StId'><option value=''>-- اختر الطالب --</option>";
+	if ($stmt_st = mysqli_prepare($dbc, $qq_st)) {
+		if (mysqli_stmt_bind_param($stmt_st, "ii", $PrgId, $YearId)) {
+			if (mysqli_stmt_execute($stmt_st)) {
+				if (mysqli_stmt_bind_result($stmt_st, $st_StId, $st_StName)) {
+					while (mysqli_stmt_fetch($stmt_st)) {
+						$sel = (isset($StId) && $StId == $st_StId) ? " selected" : "";
+						echo "<option value='$st_StId'$sel>$st_StName</option>";
+					}
+				}
+			}
+		}
+		mysqli_stmt_close($stmt_st);
+	}
+	echo "</select></div></td></tr>";
+
+	// Course dropdown - only courses belonging to this program
+	$qq_cr = "SELECT CrsId, CrsCode, CrsName FROM CoursesGuide WHERE CrsProgram=? ORDER BY CrsCode";
+	echo "<tr><td style='width:200px;'>المادة:</td><td><div class='input-container'>";
+	echo "<select class='input-field' name='CrsId'><option value=''>-- اختر المادة --</option>";
+	if ($stmt_cr = mysqli_prepare($dbc, $qq_cr)) {
+		if (mysqli_stmt_bind_param($stmt_cr, "i", $PrgId)) {
+			if (mysqli_stmt_execute($stmt_cr)) {
+				if (mysqli_stmt_bind_result($stmt_cr, $cr_CrsId, $cr_CrsCode, $cr_CrsName)) {
+					while (mysqli_stmt_fetch($stmt_cr)) {
+						$sel = (isset($CrsId) && $CrsId == $cr_CrsId) ? " selected" : "";
+						echo "<option value='$cr_CrsId'$sel>$cr_CrsName</option>";
+					}
+				}
+			}
+		}
+		mysqli_stmt_close($stmt_cr);
+	}
+	echo "</select></div></td></tr>";
+
+	// Semester input
+	echo "<tr><td style='width:200px;'>الفصل الدراسي:</td><td><div class='input-container'>";
+	echo "<input class='input-field' type='number' name='Semester' placeholder='رقم الفصل الدراسي' min='1'";
+	if (isset($Semester)) echo " value='$Semester'";
+	echo "></div></td></tr>";
+
+	echo "</table>";
+	echo "<div class='frmButtons'>";
+	echo "<button type='submit' class='savBtn' name='mode' value='saveStudentCourse'> حفظ </button>  ";
+	echo "<button type='submit' class='cnlBtn' name='mode' value='batchList'> تراجع </button>";
+      echo "</div></form></center>";
+}
+
+
+
 //*****************************************************************************************
 //sec:Manage Semester for a specific batch
 //*****************************************************************************************
@@ -1245,6 +1374,7 @@ if ($mode == "saveaddBatch") {
     if ($stmt = mysqli_prepare($dbc, $q)){
         if (mysqli_stmt_bind_param($stmt, "sss", $YearDesc,$YearStart,$YearEnd)) {
             if (mysqli_stmt_execute($stmt)) {
+                $YearId = mysqli_insert_id($dbc);
                 $infoMessage = "تمت الإضافة بنجاح!";
             } else {
                 $errorMessage = "لم يتم الحفظ<br>" . mysqli_error($dbc) . "!";
@@ -1364,6 +1494,39 @@ if ($mode == "viewBatch") {
     echo "<tr><td>تاريخ البداية</td><td>:</td><td align='right'> $YearStart </td></tr>";
 	echo "<tr><td>تاريخ النهاية</td><td>:</td><td align='right'> $YearEnd </td></tr>";
     echo "</table>";
+
+	// Query and display all courses of this program
+	$q_courses = "SELECT CrsCode, CrsName, CrsTHours FROM CoursesGuide WHERE CrsProgram=? ORDER BY CrsCode";
+	if ($stmt_courses = mysqli_prepare($dbc, $q_courses)) {
+		if (mysqli_stmt_bind_param($stmt_courses, "i", $PrgId)) {
+			if (mysqli_stmt_execute($stmt_courses)) {
+				if (mysqli_stmt_bind_result($stmt_courses, $c_CrsCode, $c_CrsName, $c_CrsTHours)) {
+					echo "<br><h4>المواد الدراسية للدبلومة</h4>";
+					echo "<table id='masterTable' style='max-width:800px; margin: 15px auto;'>";
+					echo "<tr class='header'>";
+					echo "<th style='text-align: center; width: 10%;'>م</th>";
+					echo "<th style='text-align: right; width: 25%;'>كود المادة</th>";
+					echo "<th style='text-align: right; width: 45%;'>اسم المادة</th>";
+					echo "<th style='text-align: center; width: 20%;'>الساعات</th>";
+					echo "</tr>";
+					
+					$c_idx = 1;
+					while (mysqli_stmt_fetch($stmt_courses)) {
+						echo "<tr>";
+						echo "<td style='text-align: center;'>$c_idx</td>";
+						echo "<td style='text-align: right;'>$c_CrsCode</td>";
+						echo "<td style='text-align: right;'>$c_CrsName</td>";
+						echo "<td style='text-align: center;'>$c_CrsTHours</td>";
+						echo "</tr>";
+						$c_idx++;
+					}
+					echo "</table><br>";
+				}
+			}
+		}
+		mysqli_stmt_close($stmt_courses);
+	}
+
 	echo "<br>";
 	$numberOfButtons = 3;
     $buttonCellWidth = $numberOfButtons * 115;
@@ -1930,7 +2093,7 @@ if ($mode == "batchList") {
     echo "<button type='submit' class='addBtn' name='mode' value='addBatch'> دفعة جديدة</button>";
     echo "</form></div><br>";
 
-    $numberOfButtons = 4;
+    $numberOfButtons = 5;
     $buttonCellWidth = $numberOfButtons * 115;
     $buttonCellWidth .= "px";
 
@@ -1954,6 +2117,7 @@ if ($mode == "batchList") {
 						echo "<button type='submit' class='grpBtn' name='mode' value='studentAdmission'>الطلاب</button> ";
 						echo "<button type='submit' class='edtBtn' name='mode' value='ManageSemester'>الفصول الدراسية</button> ";
 						echo "<button type='submit' class='edtBtn' name='mode' value='studentOrder'>ترتيب الدفعة</button> ";						
+						echo "<button type='submit' class='navBtn' name='mode' value='addStudentCourse'>اضافة مادة لطالب</button> ";
 						echo "</form>";
 						echo "</td>";
 						echo "</tr>";
