@@ -279,6 +279,7 @@ if($sesOk){
 }
 
 if($prmOk){
+	$perms=getUserPermissions($__uid);
 	//read post data
     foreach($_POST as $key => $value){
         $$key=$value;
@@ -336,7 +337,7 @@ if(($mode == "studentAdmission") or ($mode == "addStudent2Batch") or ($mode == "
 $PrgName = $PrgName ?? '';
 $YearDesc = $YearDesc ?? '';
 
-if($mode=="edit" or $mode=="view" or $mode=="deleteConfirm" or $mode=="batchList" or $mode=="viewBatch" or $mode =="addBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode == "addSemester" or $mode == "editSemester" or $mode == "ManageSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester" or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="addStudentCourse" or $mode=="saveStudentCourse"){
+if($mode=="edit" or $mode=="view" or $mode=="deleteConfirm" or $mode=="batchList" or $mode=="viewBatch" or $mode =="addBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode == "addSemester" or $mode == "editSemester" or $mode == "ManageSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester" or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="addStudentCourse" or $mode=="saveStudentCourse" or $mode=="removeStudentCourse" or $mode=="saveRemoveStudentCourse" or $mode=="approvalGrades"){
     $q="SELECT PrgCode,PrgName,PrgId  FROM Programs  WHERE PrgId =?";
     if($stmt=mysqli_prepare($dbc, $q)){
         if(mysqli_stmt_bind_param($stmt, "i", $PrgId )){
@@ -355,7 +356,7 @@ if($mode=="edit" or $mode=="view" or $mode=="deleteConfirm" or $mode=="batchList
 //*****************************************************************************************
 //sec:edit-view-deleteConfirm read a record for view or edit Batch
 //*****************************************************************************************
-if($mode=="viewBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="ManageSemester" or $mode == "addSemester" or $mode == "editSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester"  or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode=="addStudentCourse" or $mode=="saveStudentCourse"){
+if($mode=="viewBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="ManageSemester" or $mode == "addSemester" or $mode == "editSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester"  or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode=="addStudentCourse" or $mode=="saveStudentCourse" or $mode=="removeStudentCourse" or $mode=="saveRemoveStudentCourse" or $mode=="approvalGrades"){
     $q="SELECT `YearDesc`,`YearStart`,`YearEnd` FROM `Years` WHERE `YearId`=?";
     if($stmt=mysqli_prepare($dbc, $q)){
         if(mysqli_stmt_bind_param($stmt, "i", $YearId)){
@@ -629,6 +630,38 @@ if ($mode == "saveStudentCourse") {
 }
 
 //*****************************************************************************************
+//sec:Save removal of a student's course
+//*****************************************************************************************
+if ($mode == "saveRemoveStudentCourse") {
+	$errorMessage = "";
+	if (empty($StId))   $errorMessage .= "يجب اختيار الطالب<br>";
+	if (empty($CrsId))  $errorMessage .= "يجب اختيار المادة<br>";
+
+	if ($errorMessage != "") {
+		$mode = "removeStudentCourse";
+	} else {
+		$q = "DELETE FROM programstudentscourses WHERE StId=? AND PrgId=? AND YearId=? AND CrsId=?";
+		if ($stmt = mysqli_prepare($dbc, $q)) {
+			if (mysqli_stmt_bind_param($stmt, "iiii", $StId, $PrgId, $YearId, $CrsId)) {
+				if (mysqli_stmt_execute($stmt)) {
+					if (mysqli_stmt_affected_rows($stmt) > 0) {
+						$infoMessage = "تم الحذف بنجاح!";
+						$StId = "";
+						$CrsId = "";
+					} else {
+						$errorMessage = "الطالب غير مسجل في هذه المادة!";
+					}
+				} else {
+					$errorMessage = "لم يتم الحذف: " . mysqli_error($dbc);
+				}
+			}
+			mysqli_stmt_close($stmt);
+		}
+		$mode = "removeStudentCourse";
+	}
+}
+
+//*****************************************************************************************
 //sec:Add a course for a specific student manually
 //*****************************************************************************************
 if ($mode == "addStudentCourse") {
@@ -715,6 +748,91 @@ if ($mode == "addStudentCourse") {
 	echo "</table>";
 	echo "<div class='frmButtons'>";
 	echo "<button type='submit' class='savBtn' name='mode' value='saveStudentCourse'> حفظ </button>  ";
+	echo "<button type='submit' class='cnlBtn' name='mode' value='batchList'> تراجع </button>";
+      echo "</div></form></center>";
+}
+
+//*****************************************************************************************
+//sec:Remove a course from a specific student
+//*****************************************************************************************
+if ($mode == "removeStudentCourse") {
+	if(isset($errorMessage) && $errorMessage != ""){
+		echo "<div class='errorMessages'>$errorMessage</div><br>";
+	}
+	if(isset($infoMessage) && $infoMessage != ""){
+		if ($infoMessage == "تم الحذف بنجاح!") {
+			echo "
+			<div id='successPopup' style='position:fixed; top:20px; left:50%; transform:translateX(-50%); background-color:#4CAF50; color:white; padding:15px 30px; border-radius:5px; font-size:18px; font-weight:bold; z-index:9999; box-shadow: 0 4px 8px rgba(0,0,0,0.2); direction:rtl; text-align:center;'>
+				تم الحذف بنجاح!
+			</div>
+			<script>
+				setTimeout(function() {
+					var popup = document.getElementById('successPopup');
+					if (popup) {
+						popup.style.transition = 'opacity 0.3s ease';
+						popup.style.opacity = '0';
+						setTimeout(function() {
+							popup.parentNode.removeChild(popup);
+						}, 300);
+					}
+				}, 1000);
+			</script>
+			";
+		} else {
+			echo "<div class='infoMessages'>$infoMessage</div><br>";
+		}
+	}
+
+	echo "<center>";
+	echo "<h3>الغاء مادة لطالب - $PrgName - $YearDesc</h3>";
+	echo "<form method='post' style='max-width:700px;margin:auto;direction:rtl;'>";
+	echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+	echo "<input type='hidden' name='YearId' value='$YearId'>";
+	echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+	echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+	echo "<table width='100%'>";
+
+	// Student dropdown - only students enrolled in this batch
+	$qq_st = "SELECT Students.StID, Students.StName FROM Students INNER JOIN ProgramStudents ON Students.StID = ProgramStudents.StID WHERE ProgramStudents.PrgId=? AND ProgramStudents.YearId=? ORDER BY Students.StName";
+	echo "<tr><td style='width:200px;'>الطالب:</td><td><div class='input-container'>";
+	echo "<select class='input-field' name='StId'><option value=''>-- اختر الطالب --</option>";
+	if ($stmt_st = mysqli_prepare($dbc, $qq_st)) {
+		if (mysqli_stmt_bind_param($stmt_st, "ii", $PrgId, $YearId)) {
+			if (mysqli_stmt_execute($stmt_st)) {
+				if (mysqli_stmt_bind_result($stmt_st, $st_StId, $st_StName)) {
+					while (mysqli_stmt_fetch($stmt_st)) {
+						$sel = (isset($StId) && $StId == $st_StId) ? " selected" : "";
+						echo "<option value='$st_StId'$sel>$st_StName</option>";
+					}
+				}
+			}
+		}
+		mysqli_stmt_close($stmt_st);
+	}
+	echo "</select></div></td></tr>";
+
+	// Course dropdown - courses belonging to this program
+	$qq_cr = "SELECT CrsId, CrsCode, CrsName FROM CoursesGuide WHERE CrsProgram=? ORDER BY CrsCode";
+	echo "<tr><td style='width:200px;'>المادة:</td><td><div class='input-container'>";
+	echo "<select class='input-field' name='CrsId'><option value=''>-- اختر المادة --</option>";
+	if ($stmt_cr = mysqli_prepare($dbc, $qq_cr)) {
+		if (mysqli_stmt_bind_param($stmt_cr, "i", $PrgId)) {
+			if (mysqli_stmt_execute($stmt_cr)) {
+				if (mysqli_stmt_bind_result($stmt_cr, $cr_CrsId, $cr_CrsCode, $cr_CrsName)) {
+					while (mysqli_stmt_fetch($stmt_cr)) {
+						$sel = (isset($CrsId) && $CrsId == $cr_CrsId) ? " selected" : "";
+						echo "<option value='$cr_CrsId'$sel>$cr_CrsName</option>";
+					}
+				}
+			}
+		}
+		mysqli_stmt_close($stmt_cr);
+	}
+	echo "</select></div></td></tr>";
+
+	echo "</table>";
+	echo "<div class='frmButtons'>";
+	echo "<button type='submit' class='delBtn' name='mode' value='saveRemoveStudentCourse'> حذف </button>  ";
 	echo "<button type='submit' class='cnlBtn' name='mode' value='batchList'> تراجع </button>";
       echo "</div></form></center>";
 }
@@ -2047,7 +2165,9 @@ if ($mode == "ManageSemester") {
 					echo "<td style='text-align: left;'><form method='post'>";
 					echo "<input type='hidden' name='YearId' value='$YearId'>";
 					echo "<input type='hidden' name='PrgId' value='$PrgId'>";
-					echo "<input type='hidden' name='Semester' value='$Semester'>";					
+					echo "<input type='hidden' name='Semester' value='$Semester'>";	
+					echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+					echo "<input type='hidden' name='PrgName' value='$PrgName'>";
 					echo "<button type='submit' class='edtBtn' name='mode' value='editSemester'>تعديل</button> ";
 					echo "<button type='submit' class='delBtn' name='mode' value='deleteSemester'>ازالة</button> ";
 					$NumberOfRecords = 0;
@@ -2063,7 +2183,10 @@ if ($mode == "ManageSemester") {
 					}else{
 						echo "<button type='submit' class='pwdBtn' name='mode' value='unregisterStudentSemester'>الغاء التسجيل</button> ";
 						echo "<button type='submit' class='savBtn' name='mode' value='registeredCourses'>درجات</button> ";
-						echo "<button type='submit' class='edtBtn' name='mode' value='PrintCourseScore'>طباعة درجات</button> ";											
+						echo "<button type='submit' class='edtBtn' name='mode' value='PrintCourseScore'>طباعة درجات</button> ";
+						if(isset($perms['ApproveTermGrades']) && $perms['ApproveTermGrades'] == 1){
+							echo "<button type='submit' class='okBtn' name='mode' value='approvalGrades'>اعتماد الترم</button> ";
+						}
 					}
 					echo "</form></td></tr>";
 				}
@@ -2071,6 +2194,174 @@ if ($mode == "ManageSemester") {
 	   }
 	}
     echo "</table>";
+}
+
+//****************************************************************************************
+//sec:Approval Grades List
+//****************************************************************************************
+if ($mode == "approvalGrades") {
+    if (!isset($perms['ApproveTermGrades']) || $perms['ApproveTermGrades'] != 1) {
+        $errorMessage = "غير مصرح لك باستعراض اعتماد الترم.";
+        $mode = "ManageSemester";
+    }
+}
+if ($mode == "approvalGrades") {
+?>
+<style> 
+    .transcriptHeader { 
+        direction: rtl; 
+        border: 0px solid black; 
+        border-collapse: collapse; 
+        width: 100%; 
+    } 
+    .transcriptTable { 
+        direction: ltr; 
+        border: 1px solid black; 
+        border-collapse: collapse; 
+        width: 100%; 
+    } 
+    .transcriptTableCourses { 
+        border: 1px solid black; 
+        border-collapse: collapse; 
+        text-align: right; 
+        padding: 5px;
+        direction: rtl;
+    } 
+    .transcriptTableNonCourses { 
+        text-align: center; 
+        border: 1px solid black; 
+        border-collapse: collapse; 
+        padding: 5px;
+    } 
+    .transcriptTableHeader { 
+        border: 2px solid black; 
+        background-color: #848482; 
+        color: white;
+        padding: 8px;
+        direction: rtl;
+    } 
+    .BigText{
+        font-size: 17px;
+        font-weight: bold;
+    }
+</style>
+<?php
+    echo "<center><br><br>";
+    echo "<table width='80%' class='transcriptHeader'>";
+    echo "<tr><td align='right' class='BigText'>الدبلومة: $PrgName</td></tr>";
+    echo "<tr><td align='right' class='BigText'>الدفعة: $YearDesc</td></tr>";
+    echo "<tr><td align='right' class='BigText'>الفصل الدراسي: $Semester</td></tr>";
+    echo "</table><br>";
+
+    $q = "SELECT Students.StName, Students.StEname, CoursesGuide.CrsName, CoursesGuide.CrsNameEng, CoursesGuide.CrsCode, CoursesGuide.CrsTHours, programstudentscourses.Score 
+          FROM Students 
+          INNER JOIN programstudentscourses ON Students.StID = programstudentscourses.StID 
+          INNER JOIN CoursesGuide ON programstudentscourses.CrsId = CoursesGuide.CrsId 
+          WHERE programstudentscourses.PrgId = ? 
+            AND programstudentscourses.YearId = ? 
+            AND programstudentscourses.Semester = ?
+          ORDER BY Students.StName, CoursesGuide.CrsCode";
+          
+    if ($stmt = mysqli_prepare($dbc, $q)) {
+        if (mysqli_stmt_bind_param($stmt, "iii", $PrgId, $YearId, $Semester)) {
+            if (mysqli_stmt_execute($stmt)) {
+                if (mysqli_stmt_bind_result($stmt, $StName, $StEname, $CrsName, $CrsNameEng, $CrsCode, $CrsTHours, $Score)) {
+                    
+                    echo "<table width='95%' class='transcriptTable' style='margin:auto;'>";
+                    echo "<tr>";
+                    echo "<th class='transcriptTableHeader'>اسم الطالب</th>";
+                    echo "<th class='transcriptTableHeader'>اسم الطالب بالانجليزية</th>";
+                    echo "<th class='transcriptTableHeader'>Course Code</th>";
+                    echo "<th class='transcriptTableHeader'>Course Title</th>";
+                    echo "<th class='transcriptTableHeader'>CR. ATT.</th>";
+                    echo "<th class='transcriptTableHeader'>GR</th>";
+                    echo "<th class='transcriptTableHeader'>PTS</th>";
+                    echo "<th class='transcriptTableHeader'>CR. ACD.</th>";
+                    echo "</tr>";
+                    
+                    $hasRows = false;
+                    while (mysqli_stmt_fetch($stmt)) {
+                        $hasRows = true;
+                        
+                        if($Score > 89){
+                            $ScoreGrade = "A";
+                            $ScorePoints = 12;
+                        }else if($Score > 84){
+                            $ScoreGrade = "A-";
+                            $ScorePoints = 11;
+                        }else if($Score > 79){
+                            $ScoreGrade = "B+";
+                            $ScorePoints = 10;
+                        }else if($Score > 74){
+                            $ScoreGrade = "B";
+                            $ScorePoints = 9;
+                        }else if($Score > 69){
+                            $ScoreGrade = "B-";
+                            $ScorePoints = 8;
+                        }else if($Score > 64){
+                            $ScoreGrade = "C+";
+                            $ScorePoints = 7;
+                        }else if($Score > 59){
+                            $ScoreGrade = "C";
+                            $ScorePoints = 6;
+                        }else{
+                            $ScoreGrade = "F";
+                            $ScorePoints = 0;
+                        }
+                        
+                        if ($Score === null) {
+                            $ScoreGrade = "-";
+                            $DisplayScore = "-";
+                            $CrAcd = "-";
+                        } else {
+                            $ScorePoints = ($ScorePoints / 3) * $CrsTHours;
+                            $DisplayScore = number_format($ScorePoints, 2);
+                            $CrAcd = ($ScoreGrade === "F") ? 0 : $CrsTHours;
+                        }
+                        
+                        $dispEname = ucwords(strtolower($StEname));
+
+                        echo "<tr>";
+                        echo "<td class='transcriptTableCourses'>$StName</td>";
+                        echo "<td class='transcriptTableCourses' style='direction:ltr; text-align:left;'>$dispEname</td>";
+                        echo "<td class='transcriptTableNonCourses'>$CrsCode</td>";
+                        echo "<td class='transcriptTableNonCourses' style='direction:ltr; text-align:left;'>$CrsNameEng</td>";
+                        echo "<td class='transcriptTableNonCourses'>$CrsTHours</td>";
+                        echo "<td class='transcriptTableNonCourses'>$ScoreGrade</td>";
+                        echo "<td class='transcriptTableNonCourses'>$DisplayScore</td>";
+                        echo "<td class='transcriptTableNonCourses'>$CrAcd</td>";
+                        echo "</tr>";
+                    }
+                    echo "</table>";
+                    
+                    if (!$hasRows) {
+                        echo "<p>لا يوجد طلاب مسجلين في هذا الفصل.</p>";
+                    }
+                }
+            }
+        }
+        mysqli_stmt_close($stmt);
+    }
+
+    echo "<div style='margin-top:20px; text-align:center; display:flex; justify-content:center; gap:10px;'>";
+    echo "<form method='post' style='display:inline;'>";
+    echo "<input type='hidden' name='mode' value='ManageSemester'>";
+    echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+    echo "<input type='hidden' name='YearId' value='$YearId'>";
+    echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+    echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+    echo "<button type='submit' class='cnlBtn'>عودة</button>";
+    echo "</form>";
+    echo "<form method='post' style='display:inline;'>";
+    echo "<input type='hidden' name='mode' value='approvalGrades'>";
+    echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+    echo "<input type='hidden' name='YearId' value='$YearId'>";
+    echo "<input type='hidden' name='Semester' value='$Semester'>";
+    echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+    echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+    echo "<button type='button' class='okBtn'>اتمام</button>";
+    echo "</form>";
+    echo "</div></center>";
 }
 
 //****************************************************************************************
@@ -2093,7 +2384,7 @@ if ($mode == "batchList") {
     echo "<button type='submit' class='addBtn' name='mode' value='addBatch'> دفعة جديدة</button>";
     echo "</form></div><br>";
 
-    $numberOfButtons = 5;
+    $numberOfButtons = 6;
     $buttonCellWidth = $numberOfButtons * 115;
     $buttonCellWidth .= "px";
 
@@ -2118,6 +2409,7 @@ if ($mode == "batchList") {
 						echo "<button type='submit' class='edtBtn' name='mode' value='ManageSemester'>الفصول الدراسية</button> ";
 						echo "<button type='submit' class='edtBtn' name='mode' value='studentOrder'>ترتيب الدفعة</button> ";						
 						echo "<button type='submit' class='navBtn' name='mode' value='addStudentCourse'>اضافة مادة لطالب</button> ";
+						echo "<button type='submit' class='delBtn' name='mode' value='removeStudentCourse'>الغاء المادة لطالب</button> ";
 						echo "</form>";
 						echo "</td>";
 						echo "</tr>";
