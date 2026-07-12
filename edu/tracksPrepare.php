@@ -1,7 +1,7 @@
 <?php
 //uncomment those two lines for debugging
-ini_set('display_errors',1); 
-error_reporting(E_ALL);
+//ini_set('display_errors',1); 
+//error_reporting(E_ALL);
 session_start();
 $__systemRoot="../";
 include($__systemRoot.'functions.php');        //include system functions
@@ -165,6 +165,18 @@ $subtitle="";
 				opacity: 0.9;
 			}
     		.genBtn:hover {
+				opacity: 1;
+			}
+    		.printBtn {
+				background-color: #1a73e8;
+				color: white;
+				padding: 10px 10px;
+				border: none;
+				cursor: pointer;
+				width: 100px;
+				opacity: 0.9;
+			}
+    		.printBtn:hover {
 				opacity: 1;
 			}
     		.viewBtn {
@@ -964,7 +976,7 @@ if ($mode == "showtranscript") {
 			   while(mysqli_stmt_fetch($stmt)){
 				if($header == 0){
 					echo "<form method='post' style='max-width:800px;margin:auto;direction:$__dir;'>";
-					echo "<div class='frmButtons'><button type='button' class='savBtn'  value='print' onclick='PrintDiv();'> طباعة </button>  <button type='submit' class='cnlBtn' name='mode' value='studentAdmission'>عودة</button></div>";					
+					echo "<div class='frmButtons'><button type='button' class='printBtn' onclick='PrintDiv();'>طباعة</button>  <button type='submit' class='cnlBtn' name='mode' value='studentAdmission'>عودة</button></div>";					
 					echo "</div></form>";	
 					echo "<div id='divToPrint' dir='rtl'>";
 ?>
@@ -1200,7 +1212,7 @@ if ($mode == "studentAdmission") {
       echo "<input type='hidden' name='PrgName' value='$PrgName'>";
       echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
       echo "<input type='hidden' name='mode' value='importStudents'>";
-      echo "<button type='submit' class='addBtn' style='background-color:#28a745;'>استيراد Excel</button>";
+      echo "<button type='submit' class='addBtn' style='background-color:#28a745;'>رفع Excel</button>";
       echo "</form></td>";
       echo "<td style='width: 125px; margin: auto;'><form method='post'>";
       echo "<input type='hidden' name='PrgId' value='$PrgId'>";
@@ -1288,8 +1300,15 @@ if ($mode == "studentOrder") {
 	$CurrentStudentID =0;
 	$CurrentStudentName = "";
 
-	echo "<div>";
-	echo "<input type='button' value='print' onclick='PrintDiv();' />";
+	echo "<div style='display:flex; gap:10px; justify-content:center; margin-bottom:10px;'>";
+	echo "<form method='post' style='display:inline;'>";
+	echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+	echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+	echo "<input type='hidden' name='YearId' value='$YearId'>";
+	echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+	echo "<button type='submit' class='cnlBtn' name='mode' value='batchList'>العودة</button>";
+	echo "</form>";
+	echo "<button type='button' class='printBtn' onclick='PrintDiv();'>طباعة</button>";
 	echo "</div>";
 	echo "<div id='divToPrint' dir='rtl'>";
 	?>
@@ -1459,8 +1478,15 @@ if ($mode == "studentOrderEnglish") {
 	$CurrentStudentID =0;
 	$CurrentStudentName = "";
 
-	echo "<div>";
-	echo "<input type='button' value='print' onclick='PrintDiv();' />";
+	echo "<div style='display:flex; gap:10px; justify-content:center; margin-bottom:10px;'>";
+	echo "<form method='post' style='display:inline;'>";
+	echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+	echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+	echo "<input type='hidden' name='YearId' value='$YearId'>";
+	echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+	echo "<button type='submit' class='cnlBtn' name='mode' value='batchList'>العودة</button>";
+	echo "</form>";
+	echo "<button type='button' class='printBtn' onclick='PrintDiv();'>Print</button>";
 	echo "</div>";
 	echo "<div id='divToPrint' dir='rtl'>";
 	?>
@@ -2052,7 +2078,7 @@ if ($mode == "PrintCourseScore") {
 	$Scores = Array();
 
 	echo "<div>";
-	echo "<input type='button' value='print' onclick='PrintDiv();' />";
+	echo "<button type='button' class='printBtn' onclick='PrintDiv();'>طباعة</button>";
 	echo "</div>";
 	echo "<div id='divToPrint' dir='rtl'>";
 	echo "<table id='masterTable'  dir='rtl'>";
@@ -2215,7 +2241,7 @@ if ($mode == "addSemester" or $mode == "editSemester") {
 
 	echo "<tr><td style='width: 100px;'>الفصل الدراسي:</td><td style='width:650px;'>";
 	echo "<div class='input-container'>";
-	echo "<input class='input-field' type='text' placeholder='اسم الدفعة' maxlength='255' name='Semester'";
+	echo "<input class='input-field' type='text' placeholder='الفصل الدراسي' maxlength='255' name='Semester'";
 	if(isset($Semester)){
 		echo " value='$Semester'";
 	} 
@@ -2322,31 +2348,29 @@ if ($mode == "ManageSemester") {
 					echo "<button type='submit' class='edtBtn' name='mode' value='editSemester'>تعديل</button> ";
 					echo "<button type='submit' class='delBtn' name='mode' value='deleteSemester'>ازالة</button> ";
 					$NumberOfRecords = 0;
-					foreach ($Semester_Array as $x => $y) {
+foreach ($Semester_Array as $x => $y) {
 //						echo $y ."<br>";
-						if($y == $Semester){
+    if($y == $Semester){
 
-							$NumberOfRecords = 1;
-						}
-					}
-					if($NumberOfRecords == 0){
-						echo "<button type='submit' class='navBtn' name='mode' value='registerStudentSemester'>تسجيل</button> ";
-					}else{
-						echo "<button type='submit' class='pwdBtn' name='mode' value='unregisterStudentSemester'>الغاء التسجيل</button> ";
-						echo "<button type='submit' class='savBtn' name='mode' value='registeredCourses'>درجات</button> ";
-						echo "<button type='submit' class='edtBtn' name='mode' value='PrintCourseScore'>طباعة درجات</button> ";
-						if(isset($perms['ApproveTermGrades']) && $perms['ApproveTermGrades'] == 1){
-							echo "<button type='submit' class='okBtn' name='mode' value='approvalGrades'>اعتماد الترم</button> ";
-						}
-						if($IsCompleted == 1 && isset($perms['ApproveTermGradesByDean']) && $perms['ApproveTermGradesByDean'] == 1){
-							if($IsApproved == 1){
-								echo "<button type='button' class='disBtn' disabled>تم اعتماد العميد</button> ";
-							} else {
-								echo "<input type='hidden' name='action' value='deanApprove'>";
-								echo "<button type='submit' class='savBtn' name='mode' value='ManageSemester'>اعتماد العميد</button> ";
-							}
-						}
-					}
+        $NumberOfRecords = 1;
+    }
+}
+if($NumberOfRecords != 0){
+    echo "<button type='submit' class='pwdBtn' name='mode' value='unregisterStudentSemester'>الغاء التسجيل</button> ";
+    echo "<button type='submit' class='savBtn' name='mode' value='registeredCourses'>درجات</button> ";
+    echo "<button type='submit' class='edtBtn' name='mode' value='PrintCourseScore'>طباعة درجات</button> ";
+    if(isset($perms['ApproveTermGrades']) && $perms['ApproveTermGrades'] == 1){
+        echo "<button type='submit' class='okBtn' name='mode' value='approvalGrades'>اعتماد الترم</button> ";
+    }
+    if($IsCompleted == 1 && isset($perms['ApproveTermGradesByDean']) && $perms['ApproveTermGradesByDean'] == 1){
+        if($IsApproved == 1){
+            echo "<button type='button' class='disBtn' disabled>تم اعتماد العميد</button> ";
+        } else {
+            echo "<input type='hidden' name='action' value='deanApprove'>";
+            echo "<button type='submit' class='savBtn' name='mode' value='ManageSemester'>اعتماد العميد</button> ";
+        }
+    }
+}
 					echo "</form></td></tr>";
 				}
 		   }
@@ -2930,144 +2954,258 @@ if ($mode == "complaintReports") {
 //****************************************************************************************
 //sec:Batch Reports
 //****************************************************************************************
+
+
+//****************************************************************************************
+//sec:Batch Reports
+//****************************************************************************************
 if ($mode == "batchReports") {
-	echo "<center>";
-	echo "<h3>تقرير الدفعة: $PrgName - $YearDesc</h3><br>";
+    $subMode = $_POST['subMode'] ?? '';
+    echo "<center>";
+    echo "<h3>التقارير للدفعة: $PrgName - $YearDesc</h3><br>";
+    
+    if ($subMode == "") {
+        // Show the three buttons
+        echo "<div style='display: flex; gap: 15px; justify-content: center; margin-top: 20px;'>";
+        
+        echo "<form method='post'>";
+        echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+        echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+        echo "<input type='hidden' name='YearId' value='$YearId'>";
+        echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+        echo "<input type='hidden' name='mode' value='batchReports'>";
+        echo "<input type='hidden' name='subMode' value='registrationStatus'>";
+        echo "<button type='submit' class='viewBtn' style='font-size: 16px; padding: 10px 20px;'>موقف التسجيل</button>";
+        echo "</form>";
+        
+        echo "<form method='post'>";
+        echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+        echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+        echo "<input type='hidden' name='YearId' value='$YearId'>";
+        echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+        echo "<input type='hidden' name='mode' value='batchReports'>";
+        echo "<input type='hidden' name='subMode' value='failingList'>";
+        echo "<button type='submit' class='viewBtn' style='font-size: 16px; padding: 10px 20px;'>كشف الراسبين</button>";
+        echo "</form>";
+        
+        echo "<form method='post'>";
+        echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+        echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+        echo "<input type='hidden' name='YearId' value='$YearId'>";
+        echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+        echo "<input type='hidden' name='mode' value='batchReports'>";
+        echo "<input type='hidden' name='subMode' value='droppedList'>";
+        echo "<button type='submit' class='viewBtn' style='font-size: 16px; padding: 10px 20px;'>كشف المتسربين</button>";
+        echo "</form>";
+        
+        echo "</div>";
+        echo "<br><br>";
+        
+        echo "<form method='post'>";
+        echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+        echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+        echo "<button type='submit' class='cnlBtn' name='mode' value='batchList'>العودة للدفعة</button>";
+        echo "</form>";
+    } else {
+        if ($subMode == "registrationStatus") {
+            echo "<h4>تقرير موقف التسجيل</h4>";
+            
+            // Total students in the batch (ProgramStudents)
+            $totalBatchStudents = 0;
+            $q_total = "SELECT COUNT(*) FROM ProgramStudents WHERE PrgId = ? AND YearId = ?";
+            if ($stmt = mysqli_prepare($dbc, $q_total)) {
+                if (mysqli_stmt_bind_param($stmt, "ii", $PrgId, $YearId)) {
+                    if (mysqli_stmt_execute($stmt)) {
+                        mysqli_stmt_bind_result($stmt, $totalBatchStudents);
+                        mysqli_stmt_fetch($stmt);
+                    }
+                }
+                mysqli_stmt_close($stmt);
+            }
 
-	// 1. Calculate statistics
-	// Total students in the batch (ProgramStudents)
-	$totalBatchStudents = 0;
-	$q_total = "SELECT COUNT(*) FROM ProgramStudents WHERE PrgId = ? AND YearId = ?";
-	if ($stmt = mysqli_prepare($dbc, $q_total)) {
-		if (mysqli_stmt_bind_param($stmt, "ii", $PrgId, $YearId)) {
-			if (mysqli_stmt_execute($stmt)) {
-				mysqli_stmt_bind_result($stmt, $totalBatchStudents);
-				mysqli_stmt_fetch($stmt);
-			}
-		}
-		mysqli_stmt_close($stmt);
-	}
+            // Total students registered for courses/semester in the batch (programstudentscourses)
+            $totalRegisteredSemester = 0;
+            $q_reg = "SELECT COUNT(DISTINCT StId) FROM programstudentscourses WHERE PrgId = ? AND YearId = ?";
+            if ($stmt = mysqli_prepare($dbc, $q_reg)) {
+                if (mysqli_stmt_bind_param($stmt, "ii", $PrgId, $YearId)) {
+                    if (mysqli_stmt_execute($stmt)) {
+                        mysqli_stmt_bind_result($stmt, $totalRegisteredSemester);
+                        mysqli_stmt_fetch($stmt);
+                    }
+                }
+                mysqli_stmt_close($stmt);
+            }
 
-	// Total students registered for courses/semester in the batch (programstudentscourses)
-	$totalRegisteredSemester = 0;
-	$q_reg = "SELECT COUNT(DISTINCT StId) FROM programstudentscourses WHERE PrgId = ? AND YearId = ?";
-	if ($stmt = mysqli_prepare($dbc, $q_reg)) {
-		if (mysqli_stmt_bind_param($stmt, "ii", $PrgId, $YearId)) {
-			if (mysqli_stmt_execute($stmt)) {
-				mysqli_stmt_bind_result($stmt, $totalRegisteredSemester);
-				mysqli_stmt_fetch($stmt);
-			}
-		}
-		mysqli_stmt_close($stmt);
-	}
+            // Display statistics
+            echo "<table class='masterTable' style='width: 50%; margin: auto; direction: rtl;'>";
+            echo "<tr class='header'><th colspan='2' style='text-align: center;'>إحصائيات الدفعة</th></tr>";
+            echo "<tr><td style='width: 60%; font-weight: bold;'>عدد طلاب الدفعة (المقبولين):</td><td style='text-align: center; font-weight: bold;'>$totalBatchStudents</td></tr>";
+            echo "<tr><td style='font-weight: bold;'>عدد الطلاب المسجلين للمواد/الفصول:</td><td style='text-align: center; font-weight: bold;'>$totalRegisteredSemester</td></tr>";
+            echo "</table><br><br>";
 
-	// Display statistics
-	echo "<table class='masterTable' style='width: 50%; margin: auto; direction: rtl;'>";
-	echo "<tr class='header'><th colspan='2' style='text-align: center;'>إحصائيات الدفعة</th></tr>";
-	echo "<tr><td style='width: 60%; font-weight: bold;'>عدد طلاب الدفعة (المقبولين):</td><td style='text-align: center; font-weight: bold;'>$totalBatchStudents</td></tr>";
-	echo "<tr><td style='font-weight: bold;'>عدد الطلاب المسجلين للمواد/الفصول:</td><td style='text-align: center; font-weight: bold;'>$totalRegisteredSemester</td></tr>";
-	echo "</table><br><br>";
+            // Enrolled list
+            echo "<h4>الطلاب المقبولين بالدفعة</h4>";
+            $q_enrolled = "SELECT s.StName, s.StNationalID, s.StMaritimePassportNo, s.StTels, s.StWhatsApp, s.StCompany 
+                           FROM ProgramStudents ps
+                           INNER JOIN Students s ON ps.StId = s.StID
+                           WHERE ps.PrgId = ? AND ps.YearId = ?
+                           ORDER BY s.StName ASC";
 
-	// 2. List of students who completed registration in this batch (من أتم التسجيل بالدفعة)
-	echo "<h4>الطلاب المقبولين بالدفعة (من أتم التسجيل)</h4>";
-	$q_enrolled = "SELECT s.StName, s.StNationalID, s.StMaritimePassportNo, s.StTels, s.StWhatsApp, s.StCompany 
-				   FROM ProgramStudents ps
-				   INNER JOIN Students s ON ps.StId = s.StID
-				   WHERE ps.PrgId = ? AND ps.YearId = ?
-				   ORDER BY s.StName ASC";
-
-	$hasEnrolled = false;
-	if ($stmt = mysqli_prepare($dbc, $q_enrolled)) {
-		if (mysqli_stmt_bind_param($stmt, "ii", $PrgId, $YearId)) {
-			if (mysqli_stmt_execute($stmt)) {
-				if (mysqli_stmt_bind_result($stmt, $stName, $nationalId, $passport, $tels, $whatsapp, $company)) {
-					echo "<table class='masterTable' style='width: 90%; margin: auto; direction: rtl;'>";
-					echo "<tr class='header'>
-							<th style='width: 5%;'>م</th>
-							<th style='width: 30%;'>الاسم</th>
-							<th style='width: 15%;'>رقم البطاقة</th>
-							<th style='width: 15%;'>رقم الجواز</th>
-							<th style='width: 15%;'>الهاتف</th>
-							<th style='width: 10%;'>واتساب</th>
-						  </tr>";
-					$i = 1;
-					while (mysqli_stmt_fetch($stmt)) {
-						$hasEnrolled = true;
-						echo "<tr>
-								<td style='text-align: center;'>$i</td>
-								<td>$stName</td>
-								<td>$nationalId</td>
-								<td>$passport</td>
-								<td>$tels</td>
-								<td>$whatsapp</td>
-							  </tr>";
-						$i++;
-					}
-					echo "</table>";
-				}
-			}
-		}
-		mysqli_stmt_close($stmt);
-	}
-	if (!$hasEnrolled) {
-		echo "<p>لا يوجد طلاب مقبولين في هذه الدفعة حالياً.</p>";
-	}
-	echo "<br><br>";
-
-	// 3. List of students who did NOT register in this batch (من لم يسجل بالدفعة)
-	echo "<h4>الطلاب غير المسجلين</h4>";
-	$q_not_enrolled = "SELECT s.StName, s.StNationalID, s.StMaritimePassportNo, s.StTels, s.StWhatsApp, s.StCompany 
-					   FROM Students s
-					   WHERE s.StID NOT IN (
-						   SELECT ps.StId FROM ProgramStudents ps WHERE ps.PrgId = ? AND ps.YearId = ?
-					   )
-					   ORDER BY s.StName ASC";
-
-	$hasNotEnrolled = false;
-	if ($stmt = mysqli_prepare($dbc, $q_not_enrolled)) {
-		if (mysqli_stmt_bind_param($stmt, "ii", $PrgId, $YearId)) {
-			if (mysqli_stmt_execute($stmt)) {
-				if (mysqli_stmt_bind_result($stmt, $stName, $nationalId, $passport, $tels, $whatsapp, $company)) {
-					echo "<table class='masterTable' style='width: 90%; margin: auto; direction: rtl;'>";
-					echo "<tr class='header'>
-							<th style='width: 5%;'>م</th>
-							<th style='width: 30%;'>الاسم</th>
-							<th style='width: 15%;'>رقم البطاقة</th>
-							<th style='width: 15%;'>رقم الجواز</th>
-							<th style='width: 15%;'>الهاتف</th>
-							<th style='width: 10%;'>واتساب</th>
-						  </tr>";
-					$i = 1;
-					while (mysqli_stmt_fetch($stmt)) {
-						$hasNotEnrolled = true;
-						echo "<tr>
-								<td style='text-align: center;'>$i</td>
-								<td>$stName</td>
-								<td>$nationalId</td>
-								<td>$passport</td>
-								<td>$tels</td>
-								<td>$whatsapp</td>
-							  </tr>";
-						$i++;
-					}
-					echo "</table>";
-				}
-			}
-		}
-		mysqli_stmt_close($stmt);
-	}
-	if (!$hasNotEnrolled) {
-		echo "<p>جميع الطلاب مقيدون بالدفعة.</p>";
-	}
-	echo "<br><br>";
-
-	// Back button to batch list
-	echo "<form method='post'>";
-	echo "<input type='hidden' name='PrgId' value='$PrgId'>";
-	echo "<input type='hidden' name='PrgName' value='$PrgName'>";
-	echo "<button type='submit' class='cnlBtn' name='mode' value='batchList'>العودة</button>";
-	echo "</form>";
-	echo "</center>";
+            $hasEnrolled = false;
+            if ($stmt = mysqli_prepare($dbc, $q_enrolled)) {
+                if (mysqli_stmt_bind_param($stmt, "ii", $PrgId, $YearId)) {
+                    if (mysqli_stmt_execute($stmt)) {
+                        if (mysqli_stmt_bind_result($stmt, $stName, $nationalId, $passport, $tels, $whatsapp, $company)) {
+                            echo "<table class='masterTable' style='width: 90%; margin: auto; direction: rtl;'>";
+                            echo "<tr class='header'>
+                                    <th style='width: 5%;'>م</th>
+                                    <th style='width: 30%;'>الاسم</th>
+                                    <th style='width: 15%;'>رقم البطاقة</th>
+                                    <th style='width: 15%;'>رقم الجواز</th>
+                                    <th style='width: 15%;'>الهاتف</th>
+                                    <th style='width: 10%;'>واتساب</th>
+                                  </tr>";
+                            $i = 1;
+                            while (mysqli_stmt_fetch($stmt)) {
+                                $hasEnrolled = true;
+                                echo "<tr>
+                                        <td style='text-align: center;'>$i</td>
+                                        <td>$stName</td>
+                                        <td>$nationalId</td>
+                                        <td>$passport</td>
+                                        <td>$tels</td>
+                                        <td>$whatsapp</td>
+                                      </tr>";
+                                $i++;
+                            }
+                            echo "</table>";
+                        }
+                    }
+                }
+                mysqli_stmt_close($stmt);
+            }
+            if (!$hasEnrolled) {
+                echo "<p>لا يوجد طلاب مقبولين في هذه الدفعة حالياً.</p>";
+            }
+            
+        } elseif ($subMode == "failingList") {
+            echo "<h4>كشف الراسبين (لكل مادة)</h4>";
+            
+            $q_failing = "SELECT s.StName, cg.CrsCode, cg.CrsName, psc.Score, psc.Semester
+                          FROM programstudentscourses psc
+                          INNER JOIN Students s ON psc.StID = s.StID
+                          INNER JOIN CoursesGuide cg ON psc.CrsId = cg.CrsId
+                          WHERE psc.PrgId = ? AND psc.YearId = ? AND psc.Score <= 59
+                          ORDER BY cg.CrsName, s.StName";
+            
+            $hasFailing = false;
+            if ($stmt = mysqli_prepare($dbc, $q_failing)) {
+                if (mysqli_stmt_bind_param($stmt, "ii", $PrgId, $YearId)) {
+                    if (mysqli_stmt_execute($stmt)) {
+                        if (mysqli_stmt_bind_result($stmt, $stName, $crsCode, $crsName, $score, $semester)) {
+                            echo "<table class='masterTable' style='width: 90%; margin: auto; direction: rtl;'>";
+                            echo "<tr class='header'>
+                                    <th style='width: 5%;'>م</th>
+                                    <th style='width: 25%;'>المادة</th>
+                                    <th style='width: 15%;'>كود المادة</th>
+                                    <th style='width: 35%;'>اسم الطالب</th>
+                                    <th style='width: 10%;'>الفصل</th>
+                                    <th style='width: 10%;'>الدرجة</th>
+                                  </tr>";
+                            $i = 1;
+                            while (mysqli_stmt_fetch($stmt)) {
+                                $hasFailing = true;
+                                echo "<tr>
+                                        <td style='text-align: center;'>$i</td>
+                                        <td>$crsName</td>
+                                        <td style='text-align: center;'>$crsCode</td>
+                                        <td>$stName</td>
+                                        <td style='text-align: center;'>$semester</td>
+                                        <td style='text-align: center; color: red; font-weight: bold;'>$score</td>
+                                      </tr>";
+                                $i++;
+                            }
+                            echo "</table>";
+                        }
+                    }
+                }
+                mysqli_stmt_close($stmt);
+            }
+            
+            if (!$hasFailing) {
+                echo "<p>لا يوجد طلاب راسبين في أي مادة لهذه الدفعة حالياً.</p>";
+            }
+            
+        } elseif ($subMode == "droppedList") {
+            echo "<h4>كشف المتسربين (سجلوا في الفصل الأول ولم يسجلوا في الثاني)</h4>";
+            
+            $q_dropped = "SELECT DISTINCT s.StName, s.StNationalID, s.StMaritimePassportNo, s.StTels, s.StWhatsApp, ps.RegistrationNumber, co.cmpName
+                          FROM programstudentscourses psc1
+                          INNER JOIN Students s ON psc1.StID = s.StID
+                          INNER JOIN ProgramStudents ps ON s.StID = ps.StId AND ps.PrgId = psc1.PrgId AND ps.YearId = psc1.YearId
+                          LEFT JOIN companies co ON s.StCompany = co.cmpId
+                          WHERE psc1.PrgId = ? AND psc1.YearId = ? AND psc1.Semester = 1
+                            AND psc1.StID NOT IN (
+                                SELECT psc2.StID 
+                                FROM programstudentscourses psc2 
+                                WHERE psc2.PrgId = ? AND psc2.YearId = ? AND psc2.Semester = 2
+                            )
+                          ORDER BY s.StName ASC";
+            
+            $hasDropped = false;
+            if ($stmt = mysqli_prepare($dbc, $q_dropped)) {
+                if (mysqli_stmt_bind_param($stmt, "iiii", $PrgId, $YearId, $PrgId, $YearId)) {
+                    if (mysqli_stmt_execute($stmt)) {
+                        if (mysqli_stmt_bind_result($stmt, $stName, $nationalId, $passport, $tels, $whatsapp, $regNum, $compName)) {
+                            echo "<table class='masterTable' style='width: 95%; margin: auto; direction: rtl;'>";
+                            echo "<tr class='header'>
+                                    <th style='width: 5%; text-align: center;'>م</th>
+                                    <th style='width: 12%; text-align: center;'>رقم التسجيل</th>
+                                    <th style='width: 25%; text-align: right; padding-right: 10px;'>اسم الطالب</th>
+                                    <th style='width: 15%; text-align: center;'>الرقم القومي</th>
+                                    <th style='width: 13%; text-align: center;'>رقم الجواز</th>
+                                    <th style='width: 10%; text-align: center;'>جهة العمل</th>
+                                    <th style='width: 10%; text-align: center;'>الهاتف</th>
+                                    <th style='width: 10%; text-align: center;'>واتساب</th>
+                                  </tr>";
+                            $i = 1;
+                            while (mysqli_stmt_fetch($stmt)) {
+                                $hasDropped = true;
+                                echo "<tr>
+                                        <td style='text-align: center;'>$i</td>
+                                        <td style='text-align: center;'>" . htmlspecialchars($regNum ?? '') . "</td>
+                                        <td style='text-align: right; padding-right: 10px;'>" . htmlspecialchars($stName ?? '') . "</td>
+                                        <td style='text-align: center;'>" . htmlspecialchars($nationalId ?? '') . "</td>
+                                        <td style='text-align: center;'>" . htmlspecialchars($passport ?? '') . "</td>
+                                        <td style='text-align: center;'>" . htmlspecialchars($compName ?? '') . "</td>
+                                        <td style='text-align: center;'>" . htmlspecialchars($tels ?? '') . "</td>
+                                        <td style='text-align: center;'>" . htmlspecialchars($whatsapp ?? '') . "</td>
+                                      </tr>";
+                                $i++;
+                            }
+                            echo "</table>";
+                        }
+                    }
+                }
+                mysqli_stmt_close($stmt);
+            }
+            
+            if (!$hasDropped) {
+                echo "<p style='text-align: center; color: #666;'>لا يوجد طلاب متسربين في هذه الدفعة حالياً.</p>";
+            }
+        }
+        
+        echo "<br><br>";
+        echo "<form method='post'>";
+        echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+        echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+        echo "<input type='hidden' name='YearId' value='$YearId'>";
+        echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+        echo "<input type='hidden' name='mode' value='batchReports'>";
+        echo "<button type='submit' class='cnlBtn'>العودة للتقارير</button>";
+        echo "</form>";
+    }
+    echo "</center>";
 }
 
 //****************************************************************************************
@@ -3184,19 +3322,19 @@ if ($mode == "showList") {
 if ($mode == "importStudents") {
     echo "<h3>استيراد طلاب للدفعة: $PrgName - $YearDesc</h3>";
     echo "<form method='post' enctype='multipart/form-data' style='max-width:600px;margin:auto;text-align:right;'>";
-    echo "<p>يرجى اختيار ملف بصيغة <b>.xlsx</b>. يجب أن يحتوي الملف على البيانات بالترتيب التالي (بدون ترويسة/عناوين الأعمدة أو معها كأول سطر، سيتم تخطي السطر الأول إذا كان يحتوي على عناوين نصية):</p>";
+    echo "<p>يرجى اختيار ملف بصيغة <b>.xlsx</b>. يجب أن يحتوي الملف على البيانات بالترتيب التالي :</p>";
     echo "<ol style='padding-right:20px;'>";
-    echo "<li>الاسم بالعربية (مطلوب)</li><li>الاسم بالإنجليزية</li><li>العنوان</li><li>الهواتف</li><li>الواتساب</li><li>رقم/كود جهة العمل (رقم)</li><li>الرقم القومي / الهوية</li><li>تاريخ الميلاد (YYYY-MM-DD)</li><li>رقم/كود الجنسية (رقم)</li><li>رقم الجواز البحري</li>";
+    echo "<li>الاسم بالعربية (مطلوب)</li><li>الاسم بالإنجليزية</li><li>العنوان</li><li>الهواتف</li><li>الواتساب</li><li>رقم/كود جهة العمل (رقم)</li><li>الرقم القومي / الهوية</li><li>تاريخ الميلاد (YYYY-MM-DD)</li><li>رقم/كود الجنسية (رقم)</li><li>رقم جواز السفر</li>";
     echo "</ol>";
     echo "<input type='hidden' name='PrgId' value='$PrgId'>";
     echo "<input type='hidden' name='YearId' value='$YearId'>";
     echo "<input type='hidden' name='PrgName' value='$PrgName'>";
     echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
     echo "<input type='hidden' name='mode' value='processImportStudents'>";
-    echo "<div class='input-container' style='padding:15px; border:1px dashed #ccc;'><input type='file' name='excel_file' accept='.xlsx' required></div><br>";
+    echo "<div class='input-container' style='padding:15px; border:1px dashed #ccc; display:flex; align-items:center; gap:10px;'><input type='file' name='excel_file' accept='.xlsx' required id='excel_file_input'><button type='button' class='cnlBtn' onclick=\"document.getElementById('excel_file_input').value='';\" style='white-space:nowrap;'>إلغاء</button></div><br>";
     echo "<div class='frmButtons'>";
-    echo "<button type='submit' class='savBtn' style='background-color:#28a745;'>رفع واستيراد</button> ";
-    echo "<button type='submit' class='cnlBtn' name='mode' value='studentAdmission'>إلغاء والعودة</button>";
+    echo "<button type='submit' class='savBtn' style='background-color:#28a745;'>رفع </button> ";
+    echo "<button type='submit' class='cnlBtn' name='mode' value='studentAdmission' formnovalidate>العودة</button>";
     echo "</div>";
     echo "</form>";
 }
