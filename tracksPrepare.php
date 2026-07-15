@@ -1428,7 +1428,7 @@ if ($mode == "saveeditSemester") {
 //*****************************************************************************************
 if ($mode == "saveaddSemester") {
     $q = "INSERT INTO `ProgramYearSemester`(`PrgId`,`YearId`, `Semester`, `SemesterStart`, `SemesterEnd`) VALUES(?,?,?,?,?)";
-	echo $q ."-" .$PrgId ."," .$YearId."," .$Semester."," .$SemesterStart."," .$SemesterEnd;
+	//echo $q ."-" .$PrgId ."," .$YearId."," .$Semester."," .$SemesterStart."," .$SemesterEnd;
     if ($stmt = mysqli_prepare($dbc, $q)){
         if (mysqli_stmt_bind_param($stmt, "iiiss", $PrgId, $YearId, $Semester, $SemesterStart, $SemesterEnd)) {
             if (mysqli_stmt_execute($stmt)) {

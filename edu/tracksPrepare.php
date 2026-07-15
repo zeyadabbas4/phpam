@@ -316,7 +316,7 @@ if($prmOk){
 		$validationError=false;
 	}
 	//read ref data
-if(($mode == "studentAdmission") or ($mode == "addStudent2Batch") or ($mode == "addSaveStudent") or ($mode=="editSaveٍStudent") or ($mode == "removeStudentFromBatch") or ($mode=="batchList") or ($mode=="importStudents") or ($mode=="processImportStudents")){
+if(($mode == "studentAdmission") or ($mode == "addStudent2Batch") or ($mode == "addSaveStudent") or ($mode=="editSaveٍStudent") or ($mode == "removeStudentFromBatch") or ($mode == "doRemoveStudentFromBatch") or ($mode=="batchList") or ($mode=="importStudents") or ($mode=="processImportStudents")){
 	if(isset($PrgId)){
 		$_SESSION['PrgId'] = $PrgId;
 		if(isset($PrgName)){
@@ -349,7 +349,7 @@ if(($mode == "studentAdmission") or ($mode == "addStudent2Batch") or ($mode == "
 $PrgName = $PrgName ?? '';
 $YearDesc = $YearDesc ?? '';
 
-if($mode=="edit" or $mode=="view" or $mode=="deleteConfirm" or $mode=="batchList" or $mode=="viewBatch" or $mode =="addBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode == "addSemester" or $mode == "editSemester" or $mode == "ManageSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester" or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="addStudentCourse" or $mode=="saveStudentCourse" or $mode=="removeStudentCourse" or $mode=="saveRemoveStudentCourse" or $mode=="approvalGrades" or $mode=="complaints" or $mode=="registerComplaint" or $mode=="saveRegisterComplaint" or $mode=="replyComplaint" or $mode=="saveReplyComplaint" or $mode=="complaintReports" or $mode=="batchReports" or $mode=="importStudents" or $mode=="processImportStudents"){
+if($mode=="edit" or $mode=="view" or $mode=="deleteConfirm" or $mode=="batchList" or $mode=="viewBatch" or $mode =="addBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode == "addSemester" or $mode == "editSemester" or $mode == "ManageSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester" or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="addStudentCourse" or $mode=="saveStudentCourse" or $mode=="removeStudentCourse" or $mode=="saveRemoveStudentCourse" or $mode=="approvalGrades" or $mode=="complaints" or $mode=="registerComplaint" or $mode=="saveRegisterComplaint" or $mode=="replyComplaint" or $mode=="saveReplyComplaint" or $mode=="complaintReports" or $mode=="batchReports" or $mode=="importStudents" or $mode=="processImportStudents" or $mode=="doRemoveStudentFromBatch"){
     $q="SELECT PrgCode,PrgName,PrgId  FROM Programs  WHERE PrgId =?";
     if($stmt=mysqli_prepare($dbc, $q)){
         if(mysqli_stmt_bind_param($stmt, "i", $PrgId )){
@@ -368,7 +368,7 @@ if($mode=="edit" or $mode=="view" or $mode=="deleteConfirm" or $mode=="batchList
 //*****************************************************************************************
 //sec:edit-view-deleteConfirm read a record for view or edit Batch
 //*****************************************************************************************
-if($mode=="viewBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="ManageSemester" or $mode == "addSemester" or $mode == "editSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester"  or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode=="addStudentCourse" or $mode=="saveStudentCourse" or $mode=="removeStudentCourse" or $mode=="saveRemoveStudentCourse" or $mode=="approvalGrades" or $mode=="complaints" or $mode=="registerComplaint" or $mode=="saveRegisterComplaint" or $mode=="replyComplaint" or $mode=="saveReplyComplaint" or $mode=="complaintReports" or $mode=="batchReports" or $mode=="importStudents" or $mode=="processImportStudents"){
+if($mode=="viewBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="ManageSemester" or $mode == "addSemester" or $mode == "editSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester"  or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode=="addStudentCourse" or $mode=="saveStudentCourse" or $mode=="removeStudentCourse" or $mode=="saveRemoveStudentCourse" or $mode=="approvalGrades" or $mode=="complaints" or $mode=="registerComplaint" or $mode=="saveRegisterComplaint" or $mode=="replyComplaint" or $mode=="saveReplyComplaint" or $mode=="complaintReports" or $mode=="batchReports" or $mode=="importStudents" or $mode=="processImportStudents" or $mode=="doRemoveStudentFromBatch"){
     $q="SELECT `YearDesc`,`YearStart`,`YearEnd` FROM `Years` WHERE `YearId`=?";
     if($stmt=mysqli_prepare($dbc, $q)){
         if(mysqli_stmt_bind_param($stmt, "i", $YearId)){
@@ -604,25 +604,87 @@ $q="INSERT INTO ProgramStudents (`StId`, `PrgId`, `YearId`, `RegistrationNumber`
 //*****************************************************************************************
 //sec:Un Register a specific student
 //*****************************************************************************************
+//*****************************************************************************************
+//sec:confirmRemoveStudentFromBatch
+//*****************************************************************************************
 if ($mode == "removeStudentFromBatch"){
-	
-//	echo "Program ID =$PrgId - Program Name= $PrgName - Year ID = $YearId - Year Description =$YearDesc - Student ID = $StId<br>";
-	
-	
-      $q="delete from ProgramStudents where (`StId`=? AND `PrgId`=? AND `YearId`=?)";
-//	  echo "<br>INSERT INTO ProgramStudents (`StId`, `PrgId`, `YearId`) VALUES (" .$StId ."," .$PrgId ."," .$YearId .")";
-	  
-      if ($stmt = mysqli_prepare($dbc, $q)) {
-        if(mysqli_stmt_bind_param($stmt,"iii", $StId, $PrgId, $YearId)){
-
-			if(!mysqli_stmt_execute($stmt)){
-				$errorMessage="Can not insert record";
+	$StName = "";
+	$q_st = "SELECT StName FROM Students WHERE StID = ?";
+	if ($stmt_st = mysqli_prepare($dbc, $q_st)) {
+		mysqli_stmt_bind_param($stmt_st, "i", $StId);
+		if (mysqli_stmt_execute($stmt_st)) {
+			mysqli_stmt_bind_result($stmt_st, $temp_StName);
+			if (mysqli_stmt_fetch($stmt_st)) {
+				$StName = $temp_StName;
 			}
-        }
-        mysqli_stmt_close($stmt);
-      }
-	  $mode="studentAdmission";	
+		}
+		mysqli_stmt_close($stmt_st);
+	}
 	
+	echo "<center>";
+	echo "<h3>إلغاء تسجيل طالب من الدفعة</h3>";
+	echo "<div style='text-align: center;'>هل أنت متأكد من إلغاء تسجيل الطالب <strong>$StName</strong> من هذه الدفعة؟<br>";
+	echo "<span style='color:red;'>تنبيه: سيتم حذف جميع تسجيلات المواد والدرجات الخاصة بهذا الطالب في هذه الدفعة أيضاً!</span></div><br>";
+	echo "<form method='post' style='max-width:500px;margin:auto;'>";
+	echo "<input type='hidden' name='StId' value='$StId'>";
+	echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+	echo "<input type='hidden' name='YearId' value='$YearId'>";
+	if(isset($PrgName)){
+		echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+	}
+	if(isset($YearDesc)){
+		echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+	}
+	echo "<div class='frmButtons'>";
+	echo "<button type='submit' class='savBtn' name='mode' value='doRemoveStudentFromBatch'> نعم </button> ";
+	echo "<button type='submit' class='cnlBtn' name='mode' value='studentAdmission'> لا </button>";
+	echo "</div>";
+	echo "</form>";
+	echo "</center>";
+}
+
+//*****************************************************************************************
+//sec:doRemoveStudentFromBatch
+//*****************************************************************************************
+if ($mode == "doRemoveStudentFromBatch") {
+    $error = false;
+    
+    // First, delete from programstudentscourses
+    $q1 = "DELETE FROM programstudentscourses WHERE StId=? AND PrgId=? AND YearId=?";
+    if ($stmt1 = mysqli_prepare($dbc, $q1)) {
+        if (mysqli_stmt_bind_param($stmt1, "iii", $StId, $PrgId, $YearId)) {
+            if (!mysqli_stmt_execute($stmt1)) {
+                $error = true;
+                $errorMessage = "تعذر حذف تسجيلات المواد والدرجات: " . mysqli_error($dbc);
+            }
+        } else {
+            $error = true;
+            $errorMessage = "تعذر ربط معلمات حذف المواد والدرجات.";
+        }
+        mysqli_stmt_close($stmt1);
+    } else {
+        $error = true;
+        $errorMessage = "تعذر إعداد استعلام حذف المواد والدرجات: " . mysqli_error($dbc);
+    }
+    
+    // Then, delete from ProgramStudents
+    if (!$error) {
+        $q2 = "DELETE FROM ProgramStudents WHERE StId=? AND PrgId=? AND YearId=?";
+        if ($stmt2 = mysqli_prepare($dbc, $q2)) {
+            if (mysqli_stmt_bind_param($stmt2, "iii", $StId, $PrgId, $YearId)) {
+                if (!mysqli_stmt_execute($stmt2)) {
+                    $errorMessage = "تعذر حذف الطالب من الدفعة: " . mysqli_error($dbc);
+                }
+            } else {
+                $errorMessage = "تعذر ربط معلمات حذف الطالب.";
+            }
+            mysqli_stmt_close($stmt2);
+        } else {
+            $errorMessage = "تعذر إعداد استعلام حذف الطالب: " . mysqli_error($dbc);
+        }
+    }
+    
+    $mode = "studentAdmission";
 }
 
 //*****************************************************************************************
@@ -2145,7 +2207,7 @@ if ($mode == "registerStudentSemester") {
    	$new_q = "";
 	$CrsId_Array = Array();
 	
-	$q_courses="SELECT `CrsId` FROM `ProgramCoursesSemester ` WHERE `PrgId`=$PrgId AND `Semester`=$Semester ORDER BY `CrsId`";
+	$q_courses="SELECT `CrsId` FROM `ProgramCoursesSemester` WHERE `PrgId`=$PrgId AND `Semester`=$Semester ORDER BY `CrsId`";
 	//echo $q_courses;
 	if ($stmt_courses = mysqli_prepare($dbc, $q_courses)){
 	   		if(mysqli_stmt_execute($stmt_courses)){
@@ -2165,7 +2227,7 @@ if ($mode == "registerStudentSemester") {
 				if(mysqli_stmt_bind_result($stmt, $StId)){
 					while(mysqli_stmt_fetch($stmt)){
 						if($new_q==""){
-							$new_q = "insert into programstudentscourses(StId,PrgId,YearId,CrsId,Semester) values ($StId,$PrgId,$YearId,$y,$Semester)";
+							$new_q = "insert ignore into programstudentscourses(StId,PrgId,YearId,CrsId,Semester) values ($StId,$PrgId,$YearId,$y,$Semester)";
 						}else{
 							$new_q = $new_q .",($StId,$PrgId,$YearId,$y,$Semester)";
 						}
@@ -2175,13 +2237,17 @@ if ($mode == "registerStudentSemester") {
 		}
 	}				
 //	echo $new_q;
-	if ($stmt = mysqli_prepare($dbc, $new_q)){
+	if ($new_q != "" && $stmt = mysqli_prepare($dbc, $new_q)){
             if (mysqli_stmt_execute($stmt)) {
                 $infoMessage = "تمت الإضافة بنجاح!";
             } else {
                 $errorMessage = "لم يتم الحفظ<br>" . mysqli_error($dbc) . "!";
             }
          mysqli_stmt_close($stmt);
+    } else {
+        if ($new_q == "") {
+            $errorMessage = "لا يوجد طلاب أو مواد مسجلة لهذا الفصل الدراسي!";
+        }
     }
     $mode = "ManageSemester";
 
@@ -2282,6 +2348,12 @@ if ($mode == "addSemester" or $mode == "editSemester") {
 //*****************************************************************************************
 if ($mode == "ManageSemester") {
     echo "<center>";
+    if (isset($errorMessage) && $errorMessage != "") {
+        echo "<div class='errorMessages'>$errorMessage</div><br>";
+    }
+    if (isset($infoMessage) && $infoMessage != "") {
+        echo "<div class='infoMessages'>$infoMessage</div><br>";
+    }
     echo "<h3>بيانات دفعه: $PrgName - $YearDesc</h3>";
     echo "<table>";
     echo "<tr><td>اسم الدفعة</td><td>:</td><td align='right'> $YearDesc </td></tr>";
@@ -2370,6 +2442,9 @@ if($NumberOfRecords != 0){
             echo "<button type='submit' class='savBtn' name='mode' value='ManageSemester'>اعتماد العميد</button> ";
         }
     }
+    echo "<button type='submit' class='savBtn' name='mode' value='registerStudentSemester'>تسجيل المواد</button> ";
+} else {
+    echo "<button type='submit' class='savBtn' name='mode' value='registerStudentSemester'>تسجيل المواد</button> ";
 }
 					echo "</form></td></tr>";
 				}
@@ -3096,7 +3171,7 @@ if ($mode == "batchReports") {
                           INNER JOIN Students s ON psc.StID = s.StID
                           INNER JOIN CoursesGuide cg ON psc.CrsId = cg.CrsId
                           WHERE psc.PrgId = ? AND psc.YearId = ? AND psc.Score <= 59
-                          ORDER BY cg.CrsName, s.StName";
+                          ORDER BY s.StName, cg.CrsName";
             
             $hasFailing = false;
             if ($stmt = mysqli_prepare($dbc, $q_failing)) {
@@ -3105,21 +3180,21 @@ if ($mode == "batchReports") {
                         if (mysqli_stmt_bind_result($stmt, $stName, $crsCode, $crsName, $score, $semester)) {
                             echo "<table class='masterTable' style='width: 90%; margin: auto; direction: rtl;'>";
                             echo "<tr class='header'>
-                                    <th style='width: 5%;'>م</th>
-                                    <th style='width: 25%;'>المادة</th>
-                                    <th style='width: 15%;'>كود المادة</th>
-                                    <th style='width: 35%;'>اسم الطالب</th>
-                                    <th style='width: 10%;'>الفصل</th>
-                                    <th style='width: 10%;'>الدرجة</th>
+                                    <th style='width: 5%; text-align: center;'>م</th>
+                                    <th style='width: 35%; text-align: right; padding-right: 10px;'>اسم الطالب</th>
+                                    <th style='width: 15%; text-align: center;'>كود المادة</th>
+                                    <th style='width: 25%; text-align: right; padding-right: 10px;'>المادة</th>
+                                    <th style='width: 10%; text-align: center;'>الفصل</th>
+                                    <th style='width: 10%; text-align: center;'>الدرجة</th>
                                   </tr>";
                             $i = 1;
                             while (mysqli_stmt_fetch($stmt)) {
                                 $hasFailing = true;
                                 echo "<tr>
                                         <td style='text-align: center;'>$i</td>
-                                        <td>$crsName</td>
+                                        <td style='text-align: right; padding-right: 10px;'>$stName</td>
                                         <td style='text-align: center;'>$crsCode</td>
-                                        <td>$stName</td>
+                                        <td style='text-align: right; padding-right: 10px;'>$crsName</td>
                                         <td style='text-align: center;'>$semester</td>
                                         <td style='text-align: center; color: red; font-weight: bold;'>$score</td>
                                       </tr>";
