@@ -1711,7 +1711,7 @@ if ($mode == "saveeditBatch") {
 //*****************************************************************************************
 if ($mode == "saveaddBatch") {
     $q = "INSERT INTO `Years`(`YearDesc`,`YearStart`,`YearEnd`,`YearType`) VALUES(?,?,?,'D')";
-	echo $q ."-" .$YearDesc ."-" .$YearStart ."-" .$YearEnd;
+	// echo $q ."-" .$YearDesc ."-" .$YearStart ."-" .$YearEnd;
     if ($stmt = mysqli_prepare($dbc, $q)){
         if (mysqli_stmt_bind_param($stmt, "sss", $YearDesc,$YearStart,$YearEnd)) {
             if (mysqli_stmt_execute($stmt)) {
@@ -1935,7 +1935,7 @@ if ($mode == "saveeditSemester") {
 //*****************************************************************************************
 if ($mode == "saveaddSemester") {
     $q = "INSERT INTO `ProgramYearSemester`(`PrgId`,`YearId`, `Semester`, `SemesterStart`, `SemesterEnd`) VALUES(?,?,?,?,?)";
-	echo $q ."-" .$PrgId ."," .$YearId."," .$Semester."," .$SemesterStart."," .$SemesterEnd;
+	// echo $q ."-" .$PrgId ."," .$YearId."," .$Semester."," .$SemesterStart."," .$SemesterEnd;
     if ($stmt = mysqli_prepare($dbc, $q)){
         if (mysqli_stmt_bind_param($stmt, "iiiss", $PrgId, $YearId, $Semester, $SemesterStart, $SemesterEnd)) {
             if (mysqli_stmt_execute($stmt)) {
@@ -1953,7 +1953,7 @@ if ($mode == "saveaddSemester") {
 //*****************************************************************************************
 if ($mode == "savecourseScoreEntry") {
     $q = "UPDATE `programstudentscourses` SET `Score`=? WHERE PrgId=$PrgId AND YearId=$YearId AND CrsId=$CrsId AND Semester=$Semester AND StId=$StId";
-	echo $q;
+	// echo $q;
     if ($stmt = mysqli_prepare($dbc, $q)) {
         if (mysqli_stmt_bind_param($stmt, "i", $Score)) {
             try {
@@ -1972,12 +1972,29 @@ if ($mode == "savecourseScoreEntry") {
 //sec:Manage Semester for a specific batch
 //*****************************************************************************************
 if ($mode == "courseScoreEntry") {
+	$CrsName = "";
+	$CrsCode = "";
+	$q_crs = "SELECT CrsCode, CrsName FROM CoursesGuide WHERE CrsId = ?";
+	if ($stmt_crs = mysqli_prepare($dbc, $q_crs)) {
+		mysqli_stmt_bind_param($stmt_crs, "i", $CrsId);
+		if (mysqli_stmt_execute($stmt_crs)) {
+			mysqli_stmt_bind_result($stmt_crs, $temp_CrsCode, $temp_CrsName);
+			if (mysqli_stmt_fetch($stmt_crs)) {
+				$CrsCode = $temp_CrsCode;
+				$CrsName = $temp_CrsName;
+			}
+		}
+		mysqli_stmt_close($stmt_crs);
+	}
+
     echo "<center>";
     echo "<h3>بيانات دفعه: $PrgName - $YearDesc</h3>";
     echo "<table>";
     echo "<tr><td>اسم الدفعة</td><td>:</td><td align='right'> $YearDesc </td></tr>";
+    echo "<tr><td>الفصل الدراسي</td><td>:</td><td align='right'> $Semester </td></tr>";
+    echo "<tr><td>المادة</td><td>:</td><td align='right'> $CrsName ($CrsCode) </td></tr>";
     echo "<tr><td>تاريخ البداية</td><td>:</td><td align='right'> $YearStart </td></tr>";
-	echo "<tr><td>تاريخ النهاية</td><td>:</td><td align='right'> $YearEnd </td></tr>";
+    echo "<tr><td>تاريخ النهاية</td><td>:</td><td align='right'> $YearEnd </td></tr>";
     echo "</table>";
 	echo "<br>";
 	$numberOfButtons = 2;
@@ -1990,8 +2007,6 @@ if ($mode == "courseScoreEntry") {
 	echo "<button type='submit' class='okBtn' name='mode' value='registeredCourses'> حسنا </button> ";
 	echo "</form></div>";	
     echo "</center>";
-	
-
 
 	echo "<table id='masterTable'>";
 	$qq = "SELECT Students.StName, Students.StId, programstudentscourses.Score from Students, programstudentscourses WHERE Students.StId=programstudentscourses.StId AND programstudentscourses.PrgId=$PrgId AND programstudentscourses.YearId=$YearId AND programstudentscourses.CrsId=$CrsId AND programstudentscourses.Semester=$Semester ORDER BY Students.StName ASC;";
@@ -2307,11 +2322,13 @@ if ($mode == "addSemester" or $mode == "editSemester") {
 
 	echo "<tr><td style='width: 100px;'>الفصل الدراسي:</td><td style='width:650px;'>";
 	echo "<div class='input-container'>";
-	echo "<input class='input-field' type='text' placeholder='الفصل الدراسي' maxlength='255' name='Semester'";
-	if(isset($Semester)){
-		echo " value='$Semester'";
-	} 
-	echo "></div></td></tr>";  
+	echo "<select class='input-field' name='Semester'>";
+	$sel1 = (isset($Semester) && $Semester == 1) ? " selected" : "";
+	$sel2 = (isset($Semester) && $Semester == 2) ? " selected" : "";
+	echo "<option value='1'$sel1>الفصل الدراسي الأول</option>";
+	echo "<option value='2'$sel2>الفصل الدراسي الثاني</option>";
+	echo "</select>";
+	echo "</div></td></tr>";  
 
 	echo "<tr><td style='width: 100px;'>تاريخ البداية:</td><td style='width:650px;'>";
 	echo "<div class='input-container'>";
