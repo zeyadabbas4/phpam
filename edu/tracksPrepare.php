@@ -349,7 +349,7 @@ if(($mode == "studentAdmission") or ($mode == "addStudent2Batch") or ($mode == "
 $PrgName = $PrgName ?? '';
 $YearDesc = $YearDesc ?? '';
 
-if($mode=="edit" or $mode=="view" or $mode=="deleteConfirm" or $mode=="batchList" or $mode=="viewBatch" or $mode =="addBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode == "addSemester" or $mode == "editSemester" or $mode == "ManageSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester" or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="addStudentCourse" or $mode=="saveStudentCourse" or $mode=="removeStudentCourse" or $mode=="saveRemoveStudentCourse" or $mode=="approvalGrades" or $mode=="complaints" or $mode=="registerComplaint" or $mode=="saveRegisterComplaint" or $mode=="replyComplaint" or $mode=="saveReplyComplaint" or $mode=="complaintReports" or $mode=="batchReports" or $mode=="importStudents" or $mode=="processImportStudents" or $mode=="doRemoveStudentFromBatch" or $mode == "transferStudent" or $mode == "searchTransferStudent" or $mode == "doTransferStudent" or $mode == "doDeleteSemester" or $mode == "doRegisterStudentSemester" or $mode == "selectCourseToRegister" or $mode == "registerCourseStudents" or $mode == "doRegisterCourseStudents"){
+if($mode=="edit" or $mode=="view" or $mode=="deleteConfirm" or $mode=="batchList" or $mode=="viewBatch" or $mode =="addBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode == "addSemester" or $mode == "editSemester" or $mode == "ManageSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester" or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="addStudentCourse" or $mode=="saveStudentCourse" or $mode=="removeStudentCourse" or $mode=="saveRemoveStudentCourse" or $mode=="approvalGrades" or $mode=="deanApprovalGrades" or $mode=="complaints" or $mode=="registerComplaint" or $mode=="saveRegisterComplaint" or $mode=="replyComplaint" or $mode=="saveReplyComplaint" or $mode=="complaintReports" or $mode=="batchReports" or $mode=="importStudents" or $mode=="processImportStudents" or $mode=="doRemoveStudentFromBatch" or $mode == "transferStudent" or $mode == "searchTransferStudent" or $mode == "doTransferStudent" or $mode == "doDeleteSemester" or $mode == "doRegisterStudentSemester" or $mode == "selectCourseToRegister" or $mode == "registerCourseStudents" or $mode == "doRegisterCourseStudents"){
     $q="SELECT PrgCode,PrgName,PrgId  FROM Programs  WHERE PrgId =?";
     if($stmt=mysqli_prepare($dbc, $q)){
         if(mysqli_stmt_bind_param($stmt, "i", $PrgId )){
@@ -368,7 +368,7 @@ if($mode=="edit" or $mode=="view" or $mode=="deleteConfirm" or $mode=="batchList
 //*****************************************************************************************
 //sec:edit-view-deleteConfirm read a record for view or edit Batch
 //*****************************************************************************************
-if($mode=="viewBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="ManageSemester" or $mode == "addSemester" or $mode == "editSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester"  or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode=="addStudentCourse" or $mode=="saveStudentCourse" or $mode=="removeStudentCourse" or $mode=="saveRemoveStudentCourse" or $mode=="approvalGrades" or $mode=="complaints" or $mode=="registerComplaint" or $mode=="saveRegisterComplaint" or $mode=="replyComplaint" or $mode=="saveReplyComplaint" or $mode=="complaintReports" or $mode=="batchReports" or $mode=="importStudents" or $mode=="processImportStudents" or $mode=="doRemoveStudentFromBatch" or $mode == "transferStudent" or $mode == "searchTransferStudent" or $mode == "doTransferStudent" or $mode == "doDeleteSemester" or $mode == "doRegisterStudentSemester" or $mode == "selectCourseToRegister" or $mode == "registerCourseStudents" or $mode == "doRegisterCourseStudents"){
+if($mode=="viewBatch" or $mode == "editBatch" or $mode=="deleteConfirmBatch" or $mode=="ManageSemester" or $mode == "addSemester" or $mode == "editSemester" or $mode == "saveaddSemester" or $mode == "saveeditSemester" or $mode == "deleteSemester" or $mode=="registerStudentSemester"  or $mode=="unregisterStudentSemester" or  $mode=="registeredCourses" or $mode == "courseScoreEntry" or $mode == "savecourseScoreEntry" or $mode=="showtranscript" or $mode == "PrintCourseScore" or $mode=="studentAdmission" or $mode == "studentOrder" or $mode == "studentOrderEnglish" or $mode=="addStudentCourse" or $mode=="saveStudentCourse" or $mode=="removeStudentCourse" or $mode=="saveRemoveStudentCourse" or $mode=="approvalGrades" or $mode=="deanApprovalGrades" or $mode=="complaints" or $mode=="registerComplaint" or $mode=="saveRegisterComplaint" or $mode=="replyComplaint" or $mode=="saveReplyComplaint" or $mode=="complaintReports" or $mode=="batchReports" or $mode=="importStudents" or $mode=="processImportStudents" or $mode=="doRemoveStudentFromBatch" or $mode == "transferStudent" or $mode == "searchTransferStudent" or $mode == "doTransferStudent" or $mode == "doDeleteSemester" or $mode == "doRegisterStudentSemester" or $mode == "selectCourseToRegister" or $mode == "registerCourseStudents" or $mode == "doRegisterCourseStudents"){
     $q="SELECT `YearDesc`,`YearStart`,`YearEnd` FROM `Years` WHERE `YearId`=?";
     if($stmt=mysqli_prepare($dbc, $q)){
         if(mysqli_stmt_bind_param($stmt, "i", $YearId)){
@@ -425,11 +425,11 @@ if($mode=="addStudent" or $mode=="editStudent"){
       echo "<table width='100%'>";
       if($mode=="editStudent"){
         echo "<tr><td style='width: 225px;'>رقم الطالب :</td><td><div class='input-container'>";
-        echo "<input class='input-field' type='text' placeholder='رقم المتدرب' name='StId' readonly";
+        echo "<input class='input-field' type='text' placeholder='رقم المتدرب' value='" . (isset($StId) ? htmlspecialchars($StId) : "") . "' readonly disabled style='background-color: #e9ecef; cursor: not-allowed;'>";
         if(isset($StId)){
-          echo " value='$StId'";
+          echo "<input type='hidden' name='StId' value='$StId'>";
         } 
-        echo "></div></td></tr>";    
+        echo "</div></td></tr>";    
       }
 
       echo "<tr><td style='width: 225px;'>اسم المتدريب (عريي):</td><td><div class='input-container'>";
@@ -532,6 +532,12 @@ if($mode=="addStudent" or $mode=="editStudent"){
 if($mode=="addSaveStudent"){
       //save new record
       $q="INSERT INTO Students (`StName`, `StEname`, `StAddress`, `StTels`, `StWhatsApp`, `StCompany`, `StNationalID`, `StBDate`, `StNationality`, `StMaritimePassportNo`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      if (isset($perms["developer"]) || isset($perms["Developer"])) {
+          echo "<div style='direction: ltr; text-align: left; background-color: #f8f9fa; border: 1px solid #d6d8db; color: #1b1e21; padding: 10px; margin: 10px 0; font-family: monospace; font-size: 14px;'>";
+          echo "<strong>[Developer Info - addSaveStudent]</strong><br>";
+          echo "<strong>Query 1:</strong> " . htmlspecialchars($q) . "<br>";
+          echo "<strong>Parameters:</strong> StName=" . htmlspecialchars($StName ?? '') . ", StEname=" . htmlspecialchars($StEname ?? '') . ", StAddress=" . htmlspecialchars($StAddress ?? '') . ", StTels=" . htmlspecialchars($StTels ?? '') . ", StWhatsApp=" . htmlspecialchars($StWhatsApp ?? '') . ", StCompany=" . htmlspecialchars($StCompany ?? '') . ", StNationalID=" . htmlspecialchars($StNationalID ?? '') . ", StBDate=" . htmlspecialchars($StBDate ?? '') . ", StNationality=" . htmlspecialchars($StNationality ?? '') . ", StMaritimePassportNo=" . htmlspecialchars($StMaritimePassportNo ?? '') . "<br>";
+      }
       if ($stmt = mysqli_prepare($dbc, $q)) {
         if(mysqli_stmt_bind_param($stmt,"sssssissis", $StName, $StEname, $StAddress, $StTels, $StWhatsApp, $StCompany, $StNationalID, $StBDate,  $StNationality, $StMaritimePassportNo)){
           if(!mysqli_stmt_execute($stmt)){
@@ -544,6 +550,10 @@ if($mode=="addSaveStudent"){
                     $RegistrationNumber = substr($YearDesc, 2) . str_pad($newStId, 3, '0', STR_PAD_LEFT);
                 }
                 $q_enroll = "INSERT INTO ProgramStudents (`StId`, `PrgId`, `YearId`, `RegistrationNumber`, `FINAL_GPA`) VALUES (?, ?, ?, ?, 0)";
+                if (isset($perms["developer"]) || isset($perms["Developer"])) {
+                    echo "<br><strong>Query 2:</strong> " . htmlspecialchars($q_enroll) . "<br>";
+                    echo "<strong>Parameters:</strong> StId=" . htmlspecialchars($newStId ?? '') . ", PrgId=" . htmlspecialchars($PrgId ?? '') . ", YearId=" . htmlspecialchars($YearId ?? '') . ", RegistrationNumber=" . htmlspecialchars($RegistrationNumber ?? '') . "<br>";
+                }
                 if ($stmt_enroll = mysqli_prepare($dbc, $q_enroll)) {
                     mysqli_stmt_bind_param($stmt_enroll, "iiis", $newStId, $PrgId, $YearId, $RegistrationNumber);
                     if (!mysqli_stmt_execute($stmt_enroll)) {
@@ -555,6 +565,9 @@ if($mode=="addSaveStudent"){
           }
         }
         mysqli_stmt_close($stmt);
+      }
+      if (isset($perms["developer"]) || isset($perms["Developer"])) {
+          echo "</div>";
       }
 	  $mode="studentAdmission";
     }
@@ -585,6 +598,13 @@ if ($mode == "addStudent2Batch"){
 	
 	
 $q="INSERT INTO ProgramStudents (`StId`, `PrgId`, `YearId`, `RegistrationNumber`, `FINAL_GPA`) VALUES (?, ?, ?, ?, 0)";
+      if (isset($perms["developer"]) || isset($perms["Developer"])) {
+          echo "<div style='direction: ltr; text-align: left; background-color: #f8f9fa; border: 1px solid #d6d8db; color: #1b1e21; padding: 10px; margin: 10px 0; font-family: monospace; font-size: 14px;'>";
+          echo "<strong>[Developer Info - addStudent2Batch]</strong><br>";
+          echo "<strong>Query:</strong> " . htmlspecialchars($q) . "<br>";
+          echo "<strong>Parameters:</strong> StId=" . htmlspecialchars($StId ?? '') . ", PrgId=" . htmlspecialchars($PrgId ?? '') . ", YearId=" . htmlspecialchars($YearId ?? '') . ", RegistrationNumber=" . htmlspecialchars($RegistrationNumber ?? '') . "<br>";
+          echo "</div>";
+      }
 	  
       if ($stmt = mysqli_prepare($dbc, $q)) {
         if(mysqli_stmt_bind_param($stmt,"iiis", $StId, $PrgId, $YearId,$RegistrationNumber)){
@@ -1256,6 +1276,10 @@ if ($mode == "showtranscript") {
 	$totalPoints = 0;
 	$DisplayScore = 0;
 	$DisplaytotalPoints = 0;
+	$semCredit = 0;
+	$semPoints = 0;
+	$cgpaCredit = 0;
+	$cgpaPoints = 0;
 	
 	if ($stmt = mysqli_prepare($dbc, $qq)){
 	   if(mysqli_stmt_execute($stmt)){
@@ -1340,7 +1364,7 @@ if ($mode == "showtranscript") {
 					$EnglishName = ucwords(strtolower($StEname));
 					echo "<center>";
 					echo "<br><br><br><br>";						
-					echo "<h3 align='center'>Official Transript</h3>";
+					echo "<h3 align='center'>Official Transcript</h3>";
 					echo "<table width='100%' class'transcriptHeader'>";
 					echo "<tr class'transcriptHeader'><td width='50%' colspan='3' align='right' class='BigText'>معهد تدريب الموانىء</td><td width='50%' colspan='3' align='left' class='BigText'>Port Training Institute<br></td></tr>";
 					echo "<tr class'transcriptHeader'><td width='20%'>رقم التسجيل</td><td>:</td><td width='30%' align='right'>$RegistrationNumber</td><td width='30%' align='left'>$RegistrationNumber</td><td>:</td><td width='20%' align='left'>Registration No</td></tr>";
@@ -1349,6 +1373,7 @@ if ($mode == "showtranscript") {
 					echo "<tr><td>رقم البطاقة </td><td>:</td><td align='right'>$StNationalID</td><td align='left'>$StNationalID</td><td>:</td><td align='left'>National ID</td></tr>";
 					echo "<tr><td>الجنسية	</td><td>:</td><td align='right'>$CntArabNationalty</td><td align='left'>$cntNationality</td><td>:</td><td align='left'>Nationality</td></tr>";
 					echo "<tr><td>الدبلومة </td><td>:</td><td align='right'>$PrgName</td><td align='left'>Professional Diploma in Ports and Logistics</td><td>:</td><td align='left'>Diploma</td></tr>";
+					echo "<tr><td colspan='6' align='center' style='padding:6px 0;'><strong>CGPA: <span id='cgpaValue'></span></strong></td></tr>";
 					echo "</table>";
 
 					echo "<table class='transcriptTable'>";
@@ -1361,13 +1386,18 @@ if ($mode == "showtranscript") {
 					if($oldSemester != 0){
 						$oldSemApproved = isset($approvedSemesters[$oldSemester]) && $approvedSemesters[$oldSemester] == 1;
 						if ($oldSemApproved) {
-							echo "<tr><td class='transcriptTableNonCourses'></td><td class='transcriptTableCourses'></td><td  class='transcriptTableSemester'>$totalCredit</td><td  class='transcriptTableSemester'></td><td  class='transcriptTableSemester'>$DisplaytotalPoints</td><td  class='transcriptTableSemester'>$totalCredit</td><td  class='transcriptTableSemester'>$totalGPA</td></tr>";
+							$semGPA = ($semCredit > 0) ? $semPoints / $semCredit : 0;
+							$DisplaySemGPA = number_format($semGPA, 2);
+							$DisplaySemPoints = number_format($semPoints, 2);
+							echo "<tr><td class='transcriptTableNonCourses'></td><td class='transcriptTableCourses'></td><td  class='transcriptTableSemester'>$semCredit</td><td  class='transcriptTableSemester'></td><td  class='transcriptTableSemester'>$DisplaySemPoints</td><td  class='transcriptTableSemester'>$semCredit</td><td  class='transcriptTableSemester'>$DisplaySemGPA</td></tr>";
 						} else {
 							echo "<tr><td class='transcriptTableNonCourses'></td><td class='transcriptTableCourses'></td><td  class='transcriptTableSemester'>-</td><td  class='transcriptTableSemester'>-</td><td  class='transcriptTableSemester'>-</td><td  class='transcriptTableSemester'>-</td><td  class='transcriptTableSemester'>-</td></tr>";
 						}
 					}
 					echo "<tr><th colspan='7' class='transcriptTableSemesterHead'>Semester No. ($Semester)</th></tr>";
 					$oldSemester = $Semester;
+					$semCredit = 0;
+					$semPoints = 0;
 			   }
 				if($Score > 89){
 					$ScoreGrade = "A";
@@ -1412,6 +1442,10 @@ if ($mode == "showtranscript") {
 				$totalCredit = $totalCredit + $CrsTHours;
 				$totalPoints = $totalPoints + $ScorePoints;
 				$DisplaytotalPoints =  number_format($totalPoints, 2);
+				$semCredit = $semCredit + $CrsTHours;
+				$semPoints = $semPoints + $ScorePoints;
+				$cgpaCredit = $cgpaCredit + $CrsTHours;
+				$cgpaPoints = $cgpaPoints + $ScorePoints;
 				if($totalPoints ==0){
 					$totalGPA = 0;
 				}else{
@@ -1422,11 +1456,17 @@ if ($mode == "showtranscript") {
 				if($oldSemester != 0){
 					$oldSemApproved = isset($approvedSemesters[$oldSemester]) && $approvedSemesters[$oldSemester] == 1;
 					if ($oldSemApproved) {
-						echo "<tr><td class='transcriptTableNonCourses'></td><td class='transcriptTableCourses'></td><td  class='transcriptTableSemester'>$totalCredit</td><td  class='transcriptTableSemester'></td><td  class='transcriptTableSemester'>$DisplaytotalPoints</td><td  class='transcriptTableSemester'>$totalCredit</td><td  class='transcriptTableSemester'>$totalGPADisplay</td></tr>";
+						$semGPA = ($semCredit > 0) ? $semPoints / $semCredit : 0;
+						$DisplaySemGPA = number_format($semGPA, 2);
+						$DisplaySemPoints = number_format($semPoints, 2);
+						echo "<tr><td class='transcriptTableNonCourses'></td><td class='transcriptTableCourses'></td><td  class='transcriptTableSemester'>$semCredit</td><td  class='transcriptTableSemester'></td><td  class='transcriptTableSemester'>$DisplaySemPoints</td><td  class='transcriptTableSemester'>$semCredit</td><td  class='transcriptTableSemester'>$DisplaySemGPA</td></tr>";
 					} else {
 						echo "<tr><td class='transcriptTableNonCourses'></td><td class='transcriptTableCourses'></td><td  class='transcriptTableSemester'>-</td><td  class='transcriptTableSemester'>-</td><td  class='transcriptTableSemester'>-</td><td  class='transcriptTableSemester'>-</td><td  class='transcriptTableSemester'>-</td></tr>";
 					}
 				}
+				$overallCGPA = ($cgpaCredit > 0) ? $cgpaPoints / $cgpaCredit : 0;
+				$DisplayCGPA = number_format($overallCGPA, 2);
+				echo "<script>document.getElementById('cgpaValue').innerText='$DisplayCGPA';</script>";
 				echo "</table><div class='SmallText' align='left'>Date:" .date("d/m/Y") ."</div><br>";
 				echo "<table width='100%' dir>";
 				echo "<tr><td width='50%' align='center'>Dean of Port Training Institute<br><br><br><br></td><td width='50%'></td></tr>";
@@ -1454,7 +1494,7 @@ if ($mode == "showtranscript") {
 
       $q="UPDATE ProgramStudents SET FINAL_GPA=? WHERE StId=? AND PrgId=?";
       if ($stmt = mysqli_prepare($dbc, $q)){
-        if(mysqli_stmt_bind_param($stmt,"dii", $totalGPA, $StId, $PrgId)){
+        if(mysqli_stmt_bind_param($stmt,"dii", $overallCGPA, $StId, $PrgId)){
           if(!mysqli_stmt_execute($stmt)){
             $errorMessage="Can not Update record";
           }
@@ -1498,7 +1538,7 @@ if ($mode == "studentAdmission") {
       echo "<input type='hidden' name='PrgName' value='$PrgName'>";
       echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
       echo "<input type='hidden' name='mode' value='transferStudent'>";
-      echo "<button type='submit' class='addBtn' style='width: auto; padding: 10px 15px;'>اضافة طالب من دفعة اخرى</button>";
+      echo "<button type='submit' class='addBtn' style='width: auto; padding: 10px 15px;'>نقل طالب من دفعة اخرى</button>";
       echo "</form></td>";
       echo "<td style='width: 130px; margin: auto;'><form method='post'>";
       echo "<input type='hidden' name='PrgId' value='$PrgId'>";
@@ -1533,6 +1573,15 @@ if ($mode == "studentAdmission") {
 
 
       $q="SELECT s.StId, s.StName, s.StNationalID, s.StMaritimePassportNo, ps.RegistrationNumber FROM Students s INNER JOIN ProgramStudents ps ON s.StID = ps.StId WHERE ps.PrgId = $PrgId AND ps.YearId = $YearId ORDER BY s.StName ASC";
+      if (isset($perms["developer"]) || isset($perms["Developer"])) {
+          echo "<div style='direction: ltr; text-align: left; background-color: #f8f9fa; border: 1px solid #d6d8db; color: #1b1e21; padding: 10px; margin: 10px 0; font-family: monospace; font-size: 14px;'>";
+          echo "<strong>[Developer Info - Student Admission]</strong><br>";
+          echo "<strong>Query 1:</strong> " . htmlspecialchars($qq) . "<br>";
+          echo "<strong>Parameters:</strong> PrgId=" . htmlspecialchars($PrgId ?? '') . ", YearId=" . htmlspecialchars($YearId ?? '') . "<br><br>";
+          echo "<strong>Query 2:</strong> " . htmlspecialchars($q) . "<br>";
+          echo "<strong>Parameters:</strong> PrgId=" . htmlspecialchars($PrgId ?? '') . ", YearId=" . htmlspecialchars($YearId ?? '') . "<br>";
+          echo "</div>";
+      }
       $r=mysqli_query($dbc,$q);
       if($r){
 		
@@ -2085,6 +2134,9 @@ if ($mode == "viewBatch") {
 					
 					$c_idx = 1;
 					while (mysqli_stmt_fetch($stmt_courses)) {
+						if (trim($c_CrsCode) == '-' && trim($c_CrsName) == 'المبادئ الاساسية للتوكيلات الملاحية') {
+							continue;
+						}
 						echo "<tr>";
 						echo "<td style='text-align: center;'>$c_idx</td>";
 						echo "<td style='text-align: right;'>$c_CrsCode</td>";
@@ -3017,21 +3069,7 @@ if ($mode == "ManageSemester") {
 	}
 //	echo $q_Semester;
  
-    if (isset($_POST['action']) && $_POST['action'] == 'deanApprove' && isset($_POST['Semester'])) {
-        $deanSemester = $_POST['Semester'];
-        if (isset($perms['ApproveTermGradesByDean']) && $perms['ApproveTermGradesByDean'] == 1) {
-            $approveQ = "UPDATE `ProgramYearSemester` SET `IsApproved` = 1 WHERE `YearId` = ? AND `PrgId` = ? AND `Semester` = ?";
-            if ($approveStmt = mysqli_prepare($dbc, $approveQ)) {
-                mysqli_stmt_bind_param($approveStmt, "iii", $YearId, $PrgId, $deanSemester);
-                if (mysqli_stmt_execute($approveStmt)) {
-                    echo "<div class='infoMessages'>تم اعتماد الترم من قبل العميد بنجاح.</div>";
-                } else {
-                    echo "<div class='errorMessages'>حدث خطأ أثناء اعتماد الترم من قبل العميد.</div>";
-                }
-                mysqli_stmt_close($approveStmt);
-            }
-        }
-    }
+
 
 	echo "<table id='masterTable'>";
 	$qq = "SELECT `SemesterStart`, `SemesterEnd`, `Semester`, `IsCompleted`, `IsApproved` FROM `ProgramYearSemester` where `YearId`=$YearId AND `PrgId`= $PrgId ORDER BY Semester ASC;";
@@ -3069,8 +3107,7 @@ if($NumberOfRecords != 0){
         if($IsApproved == 1){
             echo "<button type='button' class='disBtn' disabled>تم اعتماد العميد</button> ";
         } else {
-            echo "<input type='hidden' name='action' value='deanApprove'>";
-            echo "<button type='submit' class='savBtn' name='mode' value='ManageSemester'>اعتماد العميد</button> ";
+            echo "<button type='submit' class='savBtn' name='mode' value='deanApprovalGrades'>اعتماد العميد</button> ";
         }
     }
     echo "<button type='submit' class='savBtn' name='mode' value='selectCourseToRegister'>تسجيل المواد</button> ";
@@ -3282,6 +3319,223 @@ if ($mode == "approvalGrades") {
         echo "<button type='submit' class='disBtn' disabled>تم الإتمام</button>";
     } else {
         echo "<button type='submit' class='okBtn'>اعتماد</button>";
+    }
+    echo "</form>";
+    echo "</div></center>";
+}
+
+//****************************************************************************************
+//sec:Dean Approval Grades List
+//****************************************************************************************
+if ($mode == "deanApprovalGrades") {
+    if (!isset($perms['ApproveTermGradesByDean']) || $perms['ApproveTermGradesByDean'] != 1) {
+        $errorMessage = "غير مصرح لك باستعراض اعتماد العميد.";
+        $mode = "ManageSemester";
+    }
+}
+if ($mode == "deanApprovalGrades") {
+    // Check if current semester is completed
+    $isSemesterCompleted = 0;
+    $checkQ = "SELECT `IsCompleted` FROM `ProgramYearSemester` WHERE `YearId` = ? AND `PrgId` = ? AND `Semester` = ?";
+    if ($checkStmt = mysqli_prepare($dbc, $checkQ)) {
+        mysqli_stmt_bind_param($checkStmt, "iii", $YearId, $PrgId, $Semester);
+        if (mysqli_stmt_execute($checkStmt)) {
+            mysqli_stmt_bind_result($checkStmt, $isSemesterCompleted);
+            mysqli_stmt_fetch($checkStmt);
+        }
+        mysqli_stmt_close($checkStmt);
+    }
+    
+    if ($isSemesterCompleted != 1) {
+        $errorMessage = "لا يمكن عرض درجات اعتماد العميد للفصل قبل اعتماده/إتمامه العادي أولاً.";
+        $mode = "ManageSemester";
+    }
+}
+if ($mode == "deanApprovalGrades") {
+    
+    if (isset($_POST['action']) && $_POST['action'] == 'completeDeanApproval') {
+        $updateQ = "UPDATE `ProgramYearSemester` SET `IsApproved` = 1 WHERE `YearId` = ? AND `PrgId` = ? AND `Semester` = ?";
+        if ($updateStmt = mysqli_prepare($dbc, $updateQ)) {
+            mysqli_stmt_bind_param($updateStmt, "iii", $YearId, $PrgId, $Semester);
+            if (mysqli_stmt_execute($updateStmt)) {
+                $infoMessage = "تم اعتماد الفصل الدراسي من قبل العميد بنجاح.";
+                echo "<div class='infoMessages'>$infoMessage</div>";
+            } else {
+                $errorMessage = "حدث خطأ أثناء اعتماد العميد للفصل الدراسي.";
+                echo "<div class='errorMessages'>$errorMessage</div>";
+            }
+            mysqli_stmt_close($updateStmt);
+        }
+    }
+?>
+<style> 
+    .transcriptHeader { 
+        direction: rtl; 
+        border: 0px solid black; 
+        border-collapse: collapse; 
+        width: 100%; 
+    } 
+    .transcriptTable { 
+        direction: ltr; 
+        border: 1px solid black; 
+        border-collapse: collapse; 
+        width: 100%; 
+    } 
+    .transcriptTableCourses { 
+        border: 1px solid black; 
+        border-collapse: collapse; 
+        text-align: right; 
+        padding: 5px;
+        direction: rtl;
+    } 
+    .transcriptTableNonCourses { 
+        text-align: center; 
+        border: 1px solid black; 
+        border-collapse: collapse; 
+        padding: 5px;
+    } 
+    .transcriptTableHeader { 
+        border: 2px solid black; 
+        background-color: #848482; 
+        color: white;
+        padding: 8px;
+        direction: rtl;
+    } 
+    .BigText{
+        font-size: 17px;
+        font-weight: bold;
+    }
+</style>
+<?php
+    echo "<center><br><br>";
+    echo "<table width='80%' class='transcriptHeader'>";
+    echo "<tr><td align='right' class='BigText'>الدبلومة: $PrgName</td></tr>";
+    echo "<tr><td align='right' class='BigText'>الدفعة: $YearDesc</td></tr>";
+    echo "<tr><td align='right' class='BigText'>الفصل الدراسي: $Semester</td></tr>";
+    echo "</table><br>";
+
+    $q = "SELECT Students.StName, Students.StEname, CoursesGuide.CrsName, CoursesGuide.CrsNameEng, CoursesGuide.CrsCode, CoursesGuide.CrsTHours, programstudentscourses.Score 
+          FROM Students 
+          INNER JOIN programstudentscourses ON Students.StID = programstudentscourses.StID 
+          INNER JOIN CoursesGuide ON programstudentscourses.CrsId = CoursesGuide.CrsId 
+          WHERE programstudentscourses.PrgId = ? 
+            AND programstudentscourses.YearId = ? 
+            AND programstudentscourses.Semester = ?
+          ORDER BY Students.StName, CoursesGuide.CrsCode";
+          
+    if ($stmt = mysqli_prepare($dbc, $q)) {
+        if (mysqli_stmt_bind_param($stmt, "iii", $PrgId, $YearId, $Semester)) {
+            if (mysqli_stmt_execute($stmt)) {
+                if (mysqli_stmt_bind_result($stmt, $StName, $StEname, $CrsName, $CrsNameEng, $CrsCode, $CrsTHours, $Score)) {
+                    
+                    echo "<table width='95%' class='transcriptTable' style='margin:auto;'>";
+                    echo "<tr>";
+                    echo "<th class='transcriptTableHeader'>اسم الطالب</th>";
+                    echo "<th class='transcriptTableHeader'>اسم الطالب بالانجليزية</th>";
+                    echo "<th class='transcriptTableHeader'>Course Code</th>";
+                    echo "<th class='transcriptTableHeader'>Course Title</th>";
+                    echo "<th class='transcriptTableHeader'>CR. ATT.</th>";
+                    echo "<th class='transcriptTableHeader'>GR</th>";
+                    echo "<th class='transcriptTableHeader'>PTS</th>";
+                    echo "<th class='transcriptTableHeader'>CR. ACD.</th>";
+                    echo "</tr>";
+                    
+                    $hasRows = false;
+                    while (mysqli_stmt_fetch($stmt)) {
+                        $hasRows = true;
+                        
+                        if($Score > 89){
+                            $ScoreGrade = "A";
+                            $ScorePoints = 12;
+                        }else if($Score > 84){
+                            $ScoreGrade = "A-";
+                            $ScorePoints = 11;
+                        }else if($Score > 79){
+                            $ScoreGrade = "B+";
+                            $ScorePoints = 10;
+                        }else if($Score > 74){
+                            $ScoreGrade = "B";
+                            $ScorePoints = 9;
+                        }else if($Score > 69){
+                            $ScoreGrade = "B-";
+                            $ScorePoints = 8;
+                        }else if($Score > 64){
+                            $ScoreGrade = "C+";
+                            $ScorePoints = 7;
+                        }else if($Score > 59){
+                            $ScoreGrade = "C";
+                            $ScorePoints = 6;
+                        }else{
+                            $ScoreGrade = "F";
+                            $ScorePoints = 0;
+                        }
+                        
+                        if ($Score === null) {
+                            $ScoreGrade = "-";
+                            $DisplayScore = "-";
+                            $CrAcd = "-";
+                        } else {
+                            $ScorePoints = ($ScorePoints / 3) * $CrsTHours;
+                            $DisplayScore = number_format($ScorePoints, 2);
+                            $CrAcd = ($ScoreGrade === "F") ? 0 : $CrsTHours;
+                        }
+                        
+                        $dispEname = ucwords(strtolower($StEname));
+
+                        echo "<tr>";
+                        echo "<td class='transcriptTableCourses'>$StName</td>";
+                        echo "<td class='transcriptTableCourses' style='direction:ltr; text-align:left;'>$dispEname</td>";
+                        echo "<td class='transcriptTableNonCourses'>$CrsCode</td>";
+                        echo "<td class='transcriptTableNonCourses' style='direction:ltr; text-align:left;'>$CrsNameEng</td>";
+                        echo "<td class='transcriptTableNonCourses'>$CrsTHours</td>";
+                        echo "<td class='transcriptTableNonCourses'>$ScoreGrade</td>";
+                        echo "<td class='transcriptTableNonCourses'>$DisplayScore</td>";
+                        echo "<td class='transcriptTableNonCourses'>$CrAcd</td>";
+                        echo "</tr>";
+                    }
+                    echo "</table>";
+                    
+                    if (!$hasRows) {
+                        echo "<p>لا يوجد طلاب مسجلين في هذا الفصل.</p>";
+                    }
+                }
+            }
+        }
+        mysqli_stmt_close($stmt);
+    }
+
+    // Check if current semester is already approved by Dean
+    $isSemesterApproved = 0;
+    $checkQ = "SELECT `IsApproved` FROM `ProgramYearSemester` WHERE `YearId` = ? AND `PrgId` = ? AND `Semester` = ?";
+    if ($checkStmt = mysqli_prepare($dbc, $checkQ)) {
+        mysqli_stmt_bind_param($checkStmt, "iii", $YearId, $PrgId, $Semester);
+        if (mysqli_stmt_execute($checkStmt)) {
+            mysqli_stmt_bind_result($checkStmt, $isSemesterApproved);
+            mysqli_stmt_fetch($checkStmt);
+        }
+        mysqli_stmt_close($checkStmt);
+    }
+
+    echo "<div style='margin-top:20px; text-align:center; display:flex; justify-content:center; gap:10px;'>";
+    echo "<form method='post' style='display:inline;'>";
+    echo "<input type='hidden' name='mode' value='ManageSemester'>";
+    echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+    echo "<input type='hidden' name='YearId' value='$YearId'>";
+    echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+    echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+    echo "<button type='submit' class='cnlBtn'>عودة</button>";
+    echo "</form>";
+    echo "<form method='post' style='display:inline;'>";
+    echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+    echo "<input type='hidden' name='YearId' value='$YearId'>";
+    echo "<input type='hidden' name='Semester' value='$Semester'>";
+    echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+    echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+    echo "<input type='hidden' name='action' value='completeDeanApproval'>";
+    if ($isSemesterApproved == 1) {
+        echo "<button type='button' class='disBtn' disabled>تم اعتماد العميد</button>";
+    } else {
+        echo "<button type='submit' class='okBtn' name='mode' value='deanApprovalGrades'>اعتماد</button>";
     }
     echo "</form>";
     echo "</div></center>";
@@ -3703,6 +3957,16 @@ if ($mode == "batchReports") {
         echo "<input type='hidden' name='subMode' value='droppedList'>";
         echo "<button type='submit' class='viewBtn' style='font-size: 16px; padding: 10px 20px;'>كشف المتسربين</button>";
         echo "</form>";
+
+        echo "<form method='post'>";
+        echo "<input type='hidden' name='PrgId' value='$PrgId'>";
+        echo "<input type='hidden' name='PrgName' value='$PrgName'>";
+        echo "<input type='hidden' name='YearId' value='$YearId'>";
+        echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
+        echo "<input type='hidden' name='mode' value='batchReports'>";
+        echo "<input type='hidden' name='subMode' value='nationalityStats'>";
+        echo "<button type='submit' class='viewBtn' style='font-size: 16px; padding: 10px 20px;'>إحصائيات الجنسيات</button>";
+        echo "</form>";
         
         echo "</div>";
         echo "<br><br>";
@@ -3731,7 +3995,10 @@ if ($mode == "batchReports") {
 
             // Total students registered for courses/semester in the batch (programstudentscourses)
             $totalRegisteredSemester = 0;
-            $q_reg = "SELECT COUNT(DISTINCT StId) FROM programstudentscourses WHERE PrgId = ? AND YearId = ?";
+            $q_reg = "SELECT COUNT(DISTINCT psc.StId) 
+                      FROM programstudentscourses psc 
+                      INNER JOIN ProgramStudents ps ON psc.StId = ps.StId AND psc.PrgId = ps.PrgId AND psc.YearId = ps.YearId 
+                      WHERE psc.PrgId = ? AND psc.YearId = ?";
             if ($stmt = mysqli_prepare($dbc, $q_reg)) {
                 if (mysqli_stmt_bind_param($stmt, "ii", $PrgId, $YearId)) {
                     if (mysqli_stmt_execute($stmt)) {
@@ -3795,52 +4062,106 @@ if ($mode == "batchReports") {
             }
             
         } elseif ($subMode == "failingList") {
-            echo "<h4>كشف الراسبين (لكل مادة)</h4>";
+            echo "<h3>كشف الطلاب الراسبين بالدفعة</h3>";
             
-            $q_failing = "SELECT s.StName, cg.CrsCode, cg.CrsName, psc.Score, psc.Semester
-                          FROM programstudentscourses psc
-                          INNER JOIN Students s ON psc.StID = s.StID
-                          INNER JOIN CoursesGuide cg ON psc.CrsId = cg.CrsId
-                          WHERE psc.PrgId = ? AND psc.YearId = ? AND psc.Score <= 59
-                          ORDER BY s.StName, cg.CrsName";
-            
-            $hasFailing = false;
-            if ($stmt = mysqli_prepare($dbc, $q_failing)) {
-                if (mysqli_stmt_bind_param($stmt, "ii", $PrgId, $YearId)) {
+            // Helper function to print failing table for a specific semester
+            function printSemesterFailingTable($dbc, $PrgId, $YearId, $Semester, $semesterName) {
+                // 1. Get courses in this semester for this batch
+                $courses = [];
+                $q_courses = "SELECT DISTINCT cg.CrsId, cg.CrsCode, cg.CrsName 
+                              FROM programstudentscourses psc
+                              INNER JOIN CoursesGuide cg ON psc.CrsId = cg.CrsId
+                              WHERE psc.PrgId = ? AND psc.YearId = ? AND psc.Semester = ?
+                              ORDER BY cg.CrsCode ASC";
+                if ($stmt = mysqli_prepare($dbc, $q_courses)) {
+                    mysqli_stmt_bind_param($stmt, "iii", $PrgId, $YearId, $Semester);
                     if (mysqli_stmt_execute($stmt)) {
-                        if (mysqli_stmt_bind_result($stmt, $stName, $crsCode, $crsName, $score, $semester)) {
-                            echo "<table class='masterTable' style='width: 90%; margin: auto; direction: rtl;'>";
-                            echo "<tr class='header'>
-                                    <th style='width: 5%; text-align: center;'>م</th>
-                                    <th style='width: 35%; text-align: right; padding-right: 10px;'>اسم الطالب</th>
-                                    <th style='width: 15%; text-align: center;'>كود المادة</th>
-                                    <th style='width: 25%; text-align: right; padding-right: 10px;'>المادة</th>
-                                    <th style='width: 10%; text-align: center;'>الفصل</th>
-                                    <th style='width: 10%; text-align: center;'>الدرجة</th>
-                                  </tr>";
-                            $i = 1;
-                            while (mysqli_stmt_fetch($stmt)) {
-                                $hasFailing = true;
-                                echo "<tr>
-                                        <td style='text-align: center;'>$i</td>
-                                        <td style='text-align: right; padding-right: 10px;'>$stName</td>
-                                        <td style='text-align: center;'>$crsCode</td>
-                                        <td style='text-align: right; padding-right: 10px;'>$crsName</td>
-                                        <td style='text-align: center;'>$semester</td>
-                                        <td style='text-align: center; color: red; font-weight: bold;'>$score</td>
-                                      </tr>";
-                                $i++;
-                            }
-                            echo "</table>";
+                        mysqli_stmt_bind_result($stmt, $crsId, $crsCode, $crsName);
+                        while (mysqli_stmt_fetch($stmt)) {
+                            $courses[] = ['id' => $crsId, 'code' => $crsCode, 'name' => $crsName];
                         }
                     }
+                    mysqli_stmt_close($stmt);
                 }
-                mysqli_stmt_close($stmt);
+
+                // 2. Get students who failed in at least one course in this semester
+                $students = [];
+                $q_students = "SELECT DISTINCT s.StID, s.StName, ps.RegistrationNumber
+                               FROM programstudentscourses psc
+                               INNER JOIN Students s ON psc.StID = s.StID
+                               INNER JOIN ProgramStudents ps ON s.StID = ps.StId AND ps.PrgId = psc.PrgId AND ps.YearId = psc.YearId
+                               WHERE psc.PrgId = ? AND psc.YearId = ? AND psc.Semester = ? AND psc.Score <= 59
+                               ORDER BY s.StName ASC";
+                if ($stmt = mysqli_prepare($dbc, $q_students)) {
+                    mysqli_stmt_bind_param($stmt, "iii", $PrgId, $YearId, $Semester);
+                    if (mysqli_stmt_execute($stmt)) {
+                        mysqli_stmt_bind_result($stmt, $stId, $stName, $regNum);
+                        while (mysqli_stmt_fetch($stmt)) {
+                            $students[] = ['id' => $stId, 'name' => $stName, 'regNum' => $regNum];
+                        }
+                    }
+                    mysqli_stmt_close($stmt);
+                }
+
+                echo "<h4 style='text-align:right; margin-right:5%; color:#333;'>$semesterName</h4>";
+                if (empty($students)) {
+                    echo "<p style='text-align:center; color:#666;'>لا يوجد طلاب راسبين في هذا الفصل.</p><br>";
+                    return;
+                }
+
+                echo "<table class='masterTable' style='width: 90%; margin: auto; direction: rtl;'>";
+                echo "<tr class='header'>";
+                echo "<th style='width: 5%; text-align: center;'>م</th>";
+                echo "<th style='width: 15%; text-align: center;'>رقم التسجيل</th>";
+                echo "<th style='width: 30%; text-align: right; padding-right: 10px;'>اسم الطالب</th>";
+                
+                // Add columns for the courses
+                foreach ($courses as $c) {
+    echo "<th style='text-align: center;' title='" . htmlspecialchars($c['code'] ?? '') . "'>" . htmlspecialchars($c['name'] ?? '') . "</th>";
+                }
+                echo "</tr>";
+
+                // 3. For each student, get all scores for this semester
+                $i = 1;
+                foreach ($students as $st) {
+                    $scores = [];
+                    $q_scores = "SELECT CrsId, Score FROM programstudentscourses 
+                                 WHERE PrgId = ? AND YearId = ? AND Semester = ? AND StID = ?";
+                    if ($stmt = mysqli_prepare($dbc, $q_scores)) {
+                        mysqli_stmt_bind_param($stmt, "iiii", $PrgId, $YearId, $Semester, $st['id']);
+                        if (mysqli_stmt_execute($stmt)) {
+                            mysqli_stmt_bind_result($stmt, $crsId, $score);
+                            while (mysqli_stmt_fetch($stmt)) {
+                                $scores[$crsId] = $score;
+                            }
+                        }
+                        mysqli_stmt_close($stmt);
+                    }
+
+                    echo "<tr>";
+                    echo "<td style='text-align: center;'>$i</td>";
+                    echo "<td style='text-align: center;'>" . htmlspecialchars($st['regNum'] ?? '') . "</td>";
+                    echo "<td style='text-align: right; padding-right: 10px;'>" . htmlspecialchars($st['name'] ?? '') . "</td>";
+
+                    foreach ($courses as $c) {
+                        $score = isset($scores[$c['id']]) ? $scores[$c['id']] : null;
+                        if ($score !== null && $score <= 59) {
+                            echo "<td style='text-align: center; color: red; font-weight: bold;'>$score</td>";
+                        } else {
+                            echo "<td style='text-align: center;'>-</td>";
+                        }
+                    }
+                    echo "</tr>";
+                    $i++;
+                }
+                echo "</table><br><br>";
             }
+
+            // Print table for First Semester
+            printSemesterFailingTable($dbc, $PrgId, $YearId, 1, "الفصل الدراسي الأول");
             
-            if (!$hasFailing) {
-                echo "<p>لا يوجد طلاب راسبين في أي مادة لهذه الدفعة حالياً.</p>";
-            }
+            // Print table for Second Semester
+            printSemesterFailingTable($dbc, $PrgId, $YearId, 2, "الفصل الدراسي الثاني");
             
         } elseif ($subMode == "droppedList") {
             echo "<h4>كشف المتسربين (سجلوا في الفصل الأول ولم يسجلوا في الثاني)</h4>";
@@ -3899,6 +4220,62 @@ if ($mode == "batchReports") {
             if (!$hasDropped) {
                 echo "<p style='text-align: center; color: #666;'>لا يوجد طلاب متسربين في هذه الدفعة حالياً.</p>";
             }
+        } elseif ($subMode == "nationalityStats") {
+            echo "<h4>إحصائيات جنسيات طلاب الدفعة</h4>";
+            
+            $q_nationality = "SELECT IF(c.cntName IS NULL OR TRIM(c.cntName) = '', 'غير محدد', c.cntName) as nat_name, 
+                                     COUNT(DISTINCT s.StID) as student_count 
+                              FROM ProgramStudents ps
+                              INNER JOIN Students s ON ps.StId = s.StID
+                              LEFT JOIN Countries c ON s.StNationality = c.cntId
+                              WHERE ps.PrgId = ? AND ps.YearId = ?
+                              GROUP BY nat_name
+                              ORDER BY student_count DESC";
+            
+            $hasData = false;
+            if ($stmt = mysqli_prepare($dbc, $q_nationality)) {
+                if (mysqli_stmt_bind_param($stmt, "ii", $PrgId, $YearId)) {
+                    if (mysqli_stmt_execute($stmt)) {
+                        if (mysqli_stmt_bind_result($stmt, $nationality, $studentCount)) {
+                            echo "<table class='masterTable' style='width: 60%; margin: auto; direction: rtl;'>";
+                            echo "<tr class='header'>
+                                    <th style='width: 15%; text-align: center;'>م</th>
+                                    <th style='width: 50%; text-align: right; padding-right: 15px;'>الجنسية</th>
+                                    <th style='width: 35%; text-align: center;'>عدد الطلاب</th>
+                                  </tr>";
+                            $i = 1;
+                            $totalStudents = 0;
+                            while (mysqli_stmt_fetch($stmt)) {
+                                $hasData = true;
+                                $totalStudents += $studentCount;
+                                $displayNationality = trim($nationality ?? '');
+                                if ($displayNationality == '') {
+                                    $displayNationality = 'غير محدد';
+                                }
+                                echo "<tr>
+                                        <td style='text-align: center;'>$i</td>
+                                        <td style='text-align: right; padding-right: 15px;'>" . htmlspecialchars($displayNationality) . "</td>
+                                        <td style='text-align: center;'>$studentCount</td>
+                                      </tr>";
+                                $i++;
+                            }
+                            // Add Total Row
+                            if ($hasData) {
+                                echo "<tr style='font-weight: bold; background-color: #f2f2f2;'>
+                                        <td colspan='2' style='text-align: right; padding-right: 15px;'>الإجمالي</td>
+                                        <td style='text-align: center;'>$totalStudents</td>
+                                      </tr>";
+                            }
+                            echo "</table>";
+                        }
+                    }
+                }
+                mysqli_stmt_close($stmt);
+            }
+            
+            if (!$hasData) {
+                echo "<p style='text-align: center; color: #666;'>لا توجد بيانات طلاب لعرض جنسياتهم.</p>";
+            }
         }
         
         echo "<br><br>";
@@ -3941,7 +4318,7 @@ if ($mode == "batchList") {
    //filter list form 
    	echo "<input type='text' id='filterBox' onkeyup='filterList()' placeholder='بحث...'>";
   	echo "<table id='masterTable'><tr class='header'><th> الدفعة </th><th style='width: $buttonCellWidth'>&nbsp;</th></tr>";
-   	$q="SELECT `YearId`,`YearDesc` FROM `Years` WHERE `YearType`='D' ORDER BY `YearDesc`";
+   	$q="SELECT `YearId`,`YearDesc` FROM `Years` WHERE `YearType`='D' ORDER BY `YearDesc` DESC, `YearId` DESC";
    	if ($stmt = mysqli_prepare($dbc, $q)){
 	   		if(mysqli_stmt_execute($stmt)){
 		   		if(mysqli_stmt_bind_result($stmt, $YearId, $YearDesc)){
@@ -4030,7 +4407,7 @@ if ($mode == "importStudents") {
     echo "<form method='post' enctype='multipart/form-data' style='max-width:600px;margin:auto;text-align:right;'>";
     echo "<p>يرجى اختيار ملف بصيغة <b>.xlsx</b>. يجب أن يحتوي الملف على البيانات بالترتيب التالي :</p>";
     echo "<ol style='padding-right:20px;'>";
-    echo "<li>الاسم بالعربية (مطلوب)</li><li>الاسم بالإنجليزية</li><li>العنوان</li><li>الهواتف</li><li>الواتساب</li><li>رقم/كود جهة العمل (رقم)</li><li>الرقم القومي / الهوية</li><li>تاريخ الميلاد (YYYY-MM-DD)</li><li>رقم/كود الجنسية (رقم)</li><li>رقم جواز السفر</li>";
+    echo "<li>الاسم بالعربية (مطلوب)</li><li>الاسم بالإنجليزية</li><li>العنوان</li><li>الهواتف</li><li>الواتساب</li><li>الرقم القومي / الهوية</li><li>تاريخ الميلاد (YYYY-MM-DD)</li><li>رقم/كود الجنسية (رقم)</li><li>رقم جواز السفر</li>";
     echo "</ol>";
     echo "<input type='hidden' name='PrgId' value='$PrgId'>";
     echo "<input type='hidden' name='YearId' value='$YearId'>";
@@ -4055,8 +4432,8 @@ require_once __DIR__ . '/../include/SimpleXLSX.php';
             $failedCount = 0;
             $errors = [];
             
-            // Query to insert student
-            $q_insert_student = "INSERT INTO Students (`StName`, `StEname`, `StAddress`, `StTels`, `StWhatsApp`, `StCompany`, `StNationalID`, `StBDate`, `StNationality`, `StMaritimePassportNo`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            // Query to insert student (9 columns without StCompany)
+            $q_insert_student = "INSERT INTO Students (`StName`, `StEname`, `StAddress`, `StTels`, `StWhatsApp`, `StNationalID`, `StBDate`, `StNationality`, `StMaritimePassportNo`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             // Query to enroll student
             $q_enroll = "INSERT INTO ProgramStudents (`StId`, `PrgId`, `YearId`, `RegistrationNumber`, `FINAL_GPA`) VALUES (?, ?, ?, ?, 0)";
             
@@ -4064,7 +4441,7 @@ require_once __DIR__ . '/../include/SimpleXLSX.php';
                 // Check if row is completely empty
                 if (empty(array_filter($row))) continue;
                 
-                // Skip header row: if column 5 (company) is not numeric it's a header
+                // Skip header row: if column 5 (National ID) is not numeric it's a header
                 if ($index === 0 && (!isset($row[5]) || !is_numeric($row[5]) || $row[5] == "")) {
                     continue; 
                 }
@@ -4075,36 +4452,48 @@ require_once __DIR__ . '/../include/SimpleXLSX.php';
                 $StAddress = trim($row[2] ?? '');
                 $StTels = trim($row[3] ?? '');
                 $StWhatsApp = trim($row[4] ?? '');
-                $StCompany = (int)($row[5] ?? 0);
                 
                 // Fix: National ID may come as scientific notation float (e.g. 2.90015E+13)
-                // Convert to full integer string
-                $rawNationalID = $row[6] ?? '';
+                // Convert to full integer string (index 5)
+                $rawNationalID = $row[5] ?? '';
                 if (is_numeric($rawNationalID)) {
                     $StNationalID = number_format((float)$rawNationalID, 0, '.', '');
                 } else {
                     $StNationalID = trim($rawNationalID);
                 }
                 
-                // Handle Date: could be Excel serial number (int), text "YYYY-MM-DD", or text "DD-MM-YYYY"
-                $StBDate = $row[7] ?? '';
-                if (is_numeric($StBDate) && $StBDate > 1000) {
+                // Handle Date (index 6): robust parser supporting all Excel serials & text date formats (slashes, dashes, dots)
+                $rawBDate = trim($row[6] ?? '');
+                $StBDate = '1970-01-01'; // Default fallback
+                
+                if (is_numeric($rawBDate) && $rawBDate > 1000) {
                     // Excel serial number -> convert to Y-m-d
-                    $StBDate = gmdate("Y-m-d", (intval($StBDate) - 25569) * 86400);
-                } elseif (preg_match('/^(\d{1,2})-(\d{1,2})-(\d{4})$/', trim($StBDate), $m)) {
-                    // DD-MM-YYYY format -> convert to YYYY-MM-DD
-                    $StBDate = $m[3] . '-' . str_pad($m[2],2,'0',STR_PAD_LEFT) . '-' . str_pad($m[1],2,'0',STR_PAD_LEFT);
-                } else {
-                    $StBDate = trim($StBDate);
+                    $StBDate = gmdate("Y-m-d", (intval($rawBDate) - 25569) * 86400);
+                } elseif (!empty($rawBDate)) {
+                    // Standardize separators (/ or . to -)
+                    $cleanDate = str_replace(['/', '.'], '-', $rawBDate);
+                    if (preg_match('/^(\d{4})-(\d{1,2})-(\d{1,2})/', $cleanDate, $m)) {
+                        // YYYY-MM-DD
+                        $StBDate = sprintf('%04d-%02d-%02d', $m[1], $m[2], $m[3]);
+                    } elseif (preg_match('/^(\d{1,2})-(\d{1,2})-(\d{4})/', $cleanDate, $m)) {
+                        // DD-MM-YYYY
+                        $StBDate = sprintf('%04d-%02d-%02d', $m[3], $m[2], $m[1]);
+                    } else {
+                        // Try strtotime as ultimate fallback
+                        $ts = strtotime($rawBDate);
+                        if ($ts !== false && $ts > 0) {
+                            $StBDate = date("Y-m-d", $ts);
+                        }
+                    }
                 }
                 
-                $StNationality = (int)($row[8] ?? 0);
-                $StMaritimePassportNo = trim($row[9] ?? '');
+                $StNationality = (int)($row[7] ?? 0);
+                $StMaritimePassportNo = trim($row[8] ?? '');
                 
                 if ($StName == '') continue; // Skip empty rows
                 
                 if ($stmt = mysqli_prepare($dbc, $q_insert_student)) {
-                    mysqli_stmt_bind_param($stmt, "sssssissis", $StName, $StEname, $StAddress, $StTels, $StWhatsApp, $StCompany, $StNationalID, $StBDate, $StNationality, $StMaritimePassportNo);
+                    mysqli_stmt_bind_param($stmt, "sssssssis", $StName, $StEname, $StAddress, $StTels, $StWhatsApp, $StNationalID, $StBDate, $StNationality, $StMaritimePassportNo);
                     if (mysqli_stmt_execute($stmt)) {
                         $newStId = mysqli_insert_id($dbc);
                         mysqli_stmt_close($stmt);
