@@ -4408,8 +4408,8 @@ $subtitle = "";
                             // 1. Get required/assigned courses for this program and semester
                             $courses = [];
                             $q_courses = "SELECT pcs.CrsId, cg.CrsCode, cg.CrsName 
-                                          FROM programcoursesemester pcs
-                                          INNER JOIN coursesguide cg ON pcs.CrsId = cg.CrsId
+                                          FROM ProgramCoursesSemester pcs
+                                          INNER JOIN CoursesGuide cg ON pcs.CrsId = cg.CrsId
                                           WHERE pcs.PrgId = ? AND pcs.Semester = ?
                                           ORDER BY cg.CrsCode ASC";
                             if ($stmt = mysqli_prepare($dbc, $q_courses)) {
@@ -4426,7 +4426,7 @@ $subtitle = "";
                             // Include any other courses registered in programstudentscourses for this batch/semester
                             $q_courses_psc = "SELECT DISTINCT cg.CrsId, cg.CrsCode, cg.CrsName 
                                               FROM programstudentscourses psc
-                                              INNER JOIN coursesguide cg ON psc.CrsId = cg.CrsId
+                                              INNER JOIN CoursesGuide cg ON psc.CrsId = cg.CrsId
                                               WHERE psc.PrgId = ? AND psc.YearId = ? AND psc.Semester = ?
                                               ORDER BY cg.CrsCode ASC";
                             if ($stmt = mysqli_prepare($dbc, $q_courses_psc)) {
@@ -4452,8 +4452,8 @@ $subtitle = "";
                             // 2. Get all students assigned to this batch in ProgramStudents
                             $students = [];
                             $q_students = "SELECT s.StID, s.StName, ps.RegistrationNumber, s.StTels, s.StWhatsApp, co.cmpName
-                                           FROM programstudents ps
-                                           INNER JOIN students s ON ps.StId = s.StID
+                                           FROM ProgramStudents ps
+                                           INNER JOIN Students s ON ps.StId = s.StID
                                            LEFT JOIN companies co ON s.StCompany = co.cmpId
                                            WHERE ps.PrgId = ? AND ps.YearId = ?
                                            ORDER BY s.StName ASC";
