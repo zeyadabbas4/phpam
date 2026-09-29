@@ -511,6 +511,9 @@ if($mode=="addStudent" or $mode=="editStudent"){
 //*****************************************************************************************
 if($mode=="addSaveStudent"){
       //save new record
+      if(isset($StEname) && trim($StEname) != ''){
+          $StEname = mb_convert_case(trim($StEname), MB_CASE_TITLE, "UTF-8");
+      }
       $q="INSERT INTO Students (`StName`, `StEname`, `StAddress`, `StTels`, `StWhatsApp`, `StCompany`, `StNationalID`, `StBDate`, `StNationality`, `StMaritimePassportNo`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
       if ($stmt = mysqli_prepare($dbc, $q)) {
         if(mysqli_stmt_bind_param($stmt,"sssssissis", $StName, $StEname, $StAddress, $StTels, $StWhatsApp, $StCompany, $StNationalID, $StBDate,  $StNationality, $StMaritimePassportNo)){
@@ -527,6 +530,9 @@ if($mode=="addSaveStudent"){
 //*****************************************************************************************
  if($mode=="editSaveٍStudent"){
       //save edited value
+      if(isset($StEname) && trim($StEname) != ''){
+          $StEname = mb_convert_case(trim($StEname), MB_CASE_TITLE, "UTF-8");
+      }
       $q="UPDATE Students SET StName=?, StEname=?, StAddress=?, StTels=?, StWhatsApp=?, StCompany=?, StNationalID=?, StBDate=?, StNationality=?, StMaritimePassportNo=? WHERE StId=?";
       if ($stmt = mysqli_prepare($dbc, $q)){
         if(mysqli_stmt_bind_param($stmt,"sssssissisi", $StName, $StEname, $StAddress, $StTels, $StWhatsApp, $StCompany, $StNationalID, $StBDate,  $StNationality, $StMaritimePassportNo,$StId)){

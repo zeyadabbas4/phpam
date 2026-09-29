@@ -281,6 +281,27 @@ function readCoutries($dbc, $lang = "Ar")
     return ($result);
 }
 /**
+ * read AcademicDegrees
+ * 
+ * read AcademicDegrees into an array
+ *
+ * @param object $dbc   database connection
+ * 
+ * @return array
+ */
+function readAcademicDegrees($dbc)
+{
+    $result = array();
+    $q = "select acdId,acdName from academicDegree where acdId IN (4, 5) order by acdName";
+    $r = mysqli_query($dbc, $q);
+    if ($r) {
+        while ($row = mysqli_fetch_array($r, MYSQLI_ASSOC)) {
+            $result[$row['acdId']] = $row['acdName'];
+        }
+    }
+    return ($result);
+}
+/**
  * drawCourseLecturerTable function
  * 
  * Draws the Lecturer's table for a single course
