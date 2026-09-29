@@ -4527,21 +4527,18 @@ $subtitle = "";
                             echo "<tr class='header'>";
                             echo "<th style='width: 4%; text-align: center;'>م</th>";
                             echo "<th style='width: 12%; text-align: center;'>رقم التسجيل</th>";
-                            echo "<th style='width: 22%; text-align: right; padding-right: 10px;'>اسم الطالب</th>";
-                            echo "<th style='width: 12%; text-align: center;'>الهاتف</th>";
+                            echo "<th style='width: 25%; text-align: right; padding-right: 10px;'>اسم الطالب</th>";
+                            echo "<th style='width: 14%; text-align: center;'>الهاتف</th>";
 
                             foreach ($courses as $c) {
                                 echo "<th style='text-align: center; font-size: 13px;' title='" . htmlspecialchars($c['code'] ?? '') . "'>" . htmlspecialchars($c['name'] ?? '') . "</th>";
                             }
-
-                            echo "<th style='width: 14%; text-align: center;'>حالة التسجيل</th>";
                             echo "</tr>";
 
                             $i = 1;
                             foreach ($unassignedStudents as $row) {
                                 $st = $row['student'];
                                 $stReg = $row['reg'];
-                                $isAllMissing = ($row['missingCount'] === $row['totalCourses']);
 
                                 echo "<tr>";
                                 echo "<td style='text-align: center;'>$i</td>";
@@ -4555,12 +4552,6 @@ $subtitle = "";
                                     } else {
                                         echo "<td style='text-align: center; color: #e74c3c; font-weight: bold; background-color: #fdf2f2;'>غير مسجل</td>";
                                     }
-                                }
-
-                                if ($isAllMissing) {
-                                    echo "<td style='text-align: center; color: #c0392b; font-weight: bold; background-color: #fee;'>غير مسجل بالفصل (" . $row['missingCount'] . "/" . $row['totalCourses'] . ")</td>";
-                                } else {
-                                    echo "<td style='text-align: center; color: #d35400; font-weight: bold;'>ناقص " . $row['missingCount'] . " من " . $row['totalCourses'] . "</td>";
                                 }
 
                                 echo "</tr>";
