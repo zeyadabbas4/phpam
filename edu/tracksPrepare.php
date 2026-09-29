@@ -4133,16 +4133,6 @@ $subtitle = "";
                 echo "<button type='submit' class='viewBtn' style='font-size: 16px; padding: 10px 20px;'>تقارير الاسماء</button>";
                 echo "</form>";
 
-                echo "<form method='post'>";
-                echo "<input type='hidden' name='PrgId' value='$PrgId'>";
-                echo "<input type='hidden' name='PrgName' value='$PrgName'>";
-                echo "<input type='hidden' name='YearId' value='$YearId'>";
-                echo "<input type='hidden' name='YearDesc' value='$YearDesc'>";
-                echo "<input type='hidden' name='mode' value='batchReports'>";
-                echo "<input type='hidden' name='subMode' value='unassignedCourses'>";
-                echo "<button type='submit' class='viewBtn' style='font-size: 16px; padding: 10px 20px;'>كشف الطلاب غير المسجلين بالمواد</button>";
-                echo "</form>";
-
                 echo "</div>";
                 echo "<br><br>";
 
@@ -4409,98 +4399,170 @@ $subtitle = "";
                         echo "<p style='text-align: center; color: #666;'>لا يوجد طلاب غير مسجلين في هذه الدفعة حالياً.</p>";
                     }
                 } elseif ($subMode == "dropoutsList") {
-                    echo "<h3>كشف المتسربين </h3>";
+                    echo "<h3>كشف المتسربين</h3>";
+                    echo "<p style='text-align: center; color: #555; margin-top: -10px; font-size: 14px;'>عرض الطلاب المقيدين بالدفعة الذين لم يتم تسجيل مادة أو أكثر لهم خلال الفصل الدراسي الأول أو الثاني</p><br>";
 
                     if (!function_exists('printSemesterDropoutTable')) {
-                        function printSemesterDropoutTable($dbc, $PrgId, $YearId, $Semester, $semesterName)
+                        function printSemesterDropoutTable($dbc, $PrgId, $YearId, $Semester, $semesterTitle)
                         {
-                            // 1. Get courses in this semester for this batch
+                            // 1. Get required/assigned courses for this program and semester
                             $courses = [];
-                            $q_courses = "SELECT DISTINCT cg.CrsId, cg.CrsCode, cg.CrsName 
-                                  FROM programstudentscourses psc
-                                  INNER JOIN CoursesGuide cg ON psc.CrsId = cg.CrsId
-                                  WHERE psc.PrgId = ? AND psc.YearId = ? AND psc.Semester = ?
-                                  ORDER BY cg.CrsCode ASC";
+                            $q_courses = "SELECT pcs.CrsId, cg.CrsCode, cg.CrsName 
+                                          FROM programcoursesemester pcs
+                                          INNER JOIN coursesguide cg ON pcs.CrsId = cg.CrsId
+                                          WHERE pcs.PrgId = ? AND pcs.Semester = ?
+                                          ORDER BY cg.CrsCode ASC";
                             if ($stmt = mysqli_prepare($dbc, $q_courses)) {
+                                mysqli_stmt_bind_param($stmt, "ii", $PrgId, $Semester);
+                                if (mysqli_stmt_execute($stmt)) {
+                                    mysqli_stmt_bind_result($stmt, $crsId, $crsCode, $crsName);
+                                    while (mysqli_stmt_fetch($stmt)) {
+                                        $courses[$crsId] = ['id' => $crsId, 'code' => $crsCode, 'name' => $crsName];
+                                    }
+                                }
+                                mysqli_stmt_close($stmt);
+                            }
+
+                            // Include any other courses registered in programstudentscourses for this batch/semester
+                            $q_courses_psc = "SELECT DISTINCT cg.CrsId, cg.CrsCode, cg.CrsName 
+                                              FROM programstudentscourses psc
+                                              INNER JOIN coursesguide cg ON psc.CrsId = cg.CrsId
+                                              WHERE psc.PrgId = ? AND psc.YearId = ? AND psc.Semester = ?
+                                              ORDER BY cg.CrsCode ASC";
+                            if ($stmt = mysqli_prepare($dbc, $q_courses_psc)) {
                                 mysqli_stmt_bind_param($stmt, "iii", $PrgId, $YearId, $Semester);
                                 if (mysqli_stmt_execute($stmt)) {
                                     mysqli_stmt_bind_result($stmt, $crsId, $crsCode, $crsName);
                                     while (mysqli_stmt_fetch($stmt)) {
-                                        $courses[] = ['id' => $crsId, 'code' => $crsCode, 'name' => $crsName];
+                                        if (!isset($courses[$crsId])) {
+                                            $courses[$crsId] = ['id' => $crsId, 'code' => $crsCode, 'name' => $crsName];
+                                        }
                                     }
                                 }
                                 mysqli_stmt_close($stmt);
                             }
 
-                            // 2. Get students who failed in the WHOLE semester (all registered courses in this semester <= 59, no passing course >= 60)
-                            $students = [];
-                            $q_students = "SELECT s.StID, s.StName, ps.RegistrationNumber, s.StTels
-                                   FROM programstudentscourses psc
-                                   INNER JOIN Students s ON psc.StID = s.StID
-                                   INNER JOIN ProgramStudents ps ON s.StID = ps.StId AND ps.PrgId = psc.PrgId AND ps.YearId = psc.YearId
-                                   WHERE psc.PrgId = ? AND psc.YearId = ? AND psc.Semester = ?
-                                   GROUP BY s.StID, s.StName, ps.RegistrationNumber, s.StTels
-                                   HAVING COUNT(psc.CrsId) > 0 AND SUM(CASE WHEN psc.Score >= 60 THEN 1 ELSE 0 END) = 0
-                                   ORDER BY s.StName ASC";
-                            if ($stmt = mysqli_prepare($dbc, $q_students)) {
-                                mysqli_stmt_bind_param($stmt, "iii", $PrgId, $YearId, $Semester);
-                                if (mysqli_stmt_execute($stmt)) {
-                                    mysqli_stmt_bind_result($stmt, $stId, $stName, $regNum, $stTels);
-                                    while (mysqli_stmt_fetch($stmt)) {
-                                        $students[] = ['id' => $stId, 'name' => $stName, 'regNum' => $regNum, 'tels' => $stTels];
-                                    }
-                                }
-                                mysqli_stmt_close($stmt);
-                            }
+                            echo "<h4 style='text-align:right; margin-right:5%; color:#333; border-bottom: 2px solid #ddd; padding-bottom: 5px;'>$semesterTitle</h4>";
 
-                            echo "<h4 style='text-align:right; margin-right:5%; color:#333;'>$semesterName</h4>";
-                            if (empty($students)) {
-                                echo "<p style='text-align:center; color:#666;'>لا يوجد طلاب رسبوا في كامل هذا الفصل.</p><br>";
+                            if (empty($courses)) {
+                                echo "<p style='text-align:center; color:#888;'>لا توجد مواد مسجلة لهذا الفصل الدراسي.</p><br>";
                                 return;
                             }
 
-                            echo "<table class='masterTable' style='width: 90%; margin: auto; direction: rtl;'>";
+                            // 2. Get all students assigned to this batch in ProgramStudents
+                            $students = [];
+                            $q_students = "SELECT s.StID, s.StName, ps.RegistrationNumber, s.StTels, s.StWhatsApp, co.cmpName
+                                           FROM programstudents ps
+                                           INNER JOIN students s ON ps.StId = s.StID
+                                           LEFT JOIN companies co ON s.StCompany = co.cmpId
+                                           WHERE ps.PrgId = ? AND ps.YearId = ?
+                                           ORDER BY s.StName ASC";
+                            if ($stmt = mysqli_prepare($dbc, $q_students)) {
+                                mysqli_stmt_bind_param($stmt, "ii", $PrgId, $YearId);
+                                if (mysqli_stmt_execute($stmt)) {
+                                    mysqli_stmt_bind_result($stmt, $stId, $stName, $regNum, $stTels, $stWhatsapp, $cmpName);
+                                    while (mysqli_stmt_fetch($stmt)) {
+                                        $students[] = [
+                                            'id' => $stId,
+                                            'name' => $stName,
+                                            'regNum' => $regNum,
+                                            'tels' => $stTels,
+                                            'whatsapp' => $stWhatsapp,
+                                            'company' => $cmpName
+                                        ];
+                                    }
+                                }
+                                mysqli_stmt_close($stmt);
+                            }
+
+                            if (empty($students)) {
+                                echo "<p style='text-align:center; color:#888;'>لا يوجد طلاب مقيدين في هذه الدفعة.</p><br>";
+                                return;
+                            }
+
+                            // 3. Get all course registrations for this batch & semester
+                            $registeredMap = [];
+                            $q_reg = "SELECT StId, CrsId FROM programstudentscourses 
+                                      WHERE PrgId = ? AND YearId = ? AND Semester = ?";
+                            if ($stmt = mysqli_prepare($dbc, $q_reg)) {
+                                mysqli_stmt_bind_param($stmt, "iii", $PrgId, $YearId, $Semester);
+                                if (mysqli_stmt_execute($stmt)) {
+                                    mysqli_stmt_bind_result($stmt, $regStId, $regCrsId);
+                                    while (mysqli_stmt_fetch($stmt)) {
+                                        $registeredMap[$regStId][$regCrsId] = true;
+                                    }
+                                }
+                                mysqli_stmt_close($stmt);
+                            }
+
+                            // 4. Filter students who are missing 1 or more courses in this semester
+                            $unassignedStudents = [];
+                            foreach ($students as $st) {
+                                $stReg = $registeredMap[$st['id']] ?? [];
+                                $missingCourses = [];
+                                foreach ($courses as $cId => $cData) {
+                                    if (!isset($stReg[$cId])) {
+                                        $missingCourses[] = $cData;
+                                    }
+                                }
+                                if (!empty($missingCourses)) {
+                                    $unassignedStudents[] = [
+                                        'student' => $st,
+                                        'reg' => $stReg,
+                                        'missing' => $missingCourses,
+                                        'missingCount' => count($missingCourses),
+                                        'totalCourses' => count($courses)
+                                    ];
+                                }
+                            }
+
+                            if (empty($unassignedStudents)) {
+                                echo "<p style='text-align:center; color:#27ae60; font-weight:bold;'>جميع طلاب الدفعة مسجلون في كافة مواد هذا الفصل بنجاح.</p><br>";
+                                return;
+                            }
+
+                            echo "<div style='text-align:right; margin-right:5%; margin-bottom:10px; color:#555;'>عدد الطلاب غير مكتملي التسجيل: <b style='color:#c0392b; font-size:16px;'>" . count($unassignedStudents) . "</b> طالب من إجمالي <b style='font-size:16px;'>" . count($students) . "</b></div>";
+
+                            echo "<table class='masterTable' style='width: 95%; margin: auto; direction: rtl;'>";
                             echo "<tr class='header'>";
-                            echo "<th style='width: 5%; text-align: center;'>م</th>";
-                            echo "<th style='width: 15%; text-align: center;'>رقم التسجيل</th>";
-                            echo "<th style='width: 25%; text-align: right; padding-right: 10px;'>اسم الطالب</th>";
-                            echo "<th style='width: 15%; text-align: center;'>الهاتف</th>";
+                            echo "<th style='width: 4%; text-align: center;'>م</th>";
+                            echo "<th style='width: 12%; text-align: center;'>رقم التسجيل</th>";
+                            echo "<th style='width: 22%; text-align: right; padding-right: 10px;'>اسم الطالب</th>";
+                            echo "<th style='width: 12%; text-align: center;'>الهاتف</th>";
 
                             foreach ($courses as $c) {
-                                echo "<th style='text-align: center;' title='" . htmlspecialchars($c['code'] ?? '') . "'>" . htmlspecialchars($c['name'] ?? '') . "</th>";
+                                echo "<th style='text-align: center; font-size: 13px;' title='" . htmlspecialchars($c['code'] ?? '') . "'>" . htmlspecialchars($c['name'] ?? '') . "</th>";
                             }
+
+                            echo "<th style='width: 14%; text-align: center;'>حالة التسجيل</th>";
                             echo "</tr>";
 
                             $i = 1;
-                            foreach ($students as $st) {
-                                $scores = [];
-                                $q_scores = "SELECT CrsId, Score FROM programstudentscourses 
-                                     WHERE PrgId = ? AND YearId = ? AND Semester = ? AND StID = ?";
-                                if ($stmt = mysqli_prepare($dbc, $q_scores)) {
-                                    mysqli_stmt_bind_param($stmt, "iiii", $PrgId, $YearId, $Semester, $st['id']);
-                                    if (mysqli_stmt_execute($stmt)) {
-                                        mysqli_stmt_bind_result($stmt, $crsId, $score);
-                                        while (mysqli_stmt_fetch($stmt)) {
-                                            $scores[$crsId] = $score;
-                                        }
-                                    }
-                                    mysqli_stmt_close($stmt);
-                                }
+                            foreach ($unassignedStudents as $row) {
+                                $st = $row['student'];
+                                $stReg = $row['reg'];
+                                $isAllMissing = ($row['missingCount'] === $row['totalCourses']);
 
                                 echo "<tr>";
                                 echo "<td style='text-align: center;'>$i</td>";
-                                echo "<td style='text-align: center;'>" . htmlspecialchars($st['regNum'] ?? '') . "</td>";
+                                echo "<td style='text-align: center; font-weight: bold;'>" . htmlspecialchars($st['regNum'] ?? '') . "</td>";
                                 echo "<td style='text-align: right; padding-right: 10px;'>" . htmlspecialchars($st['name'] ?? '') . "</td>";
-                                echo "<td style='text-align: center;'>" . htmlspecialchars($st['tels'] ?? '-') . "</td>";
+                                echo "<td style='text-align: center; direction: ltr;'>" . htmlspecialchars($st['tels'] ?? '-') . "</td>";
 
-                                foreach ($courses as $c) {
-                                    $score = isset($scores[$c['id']]) ? $scores[$c['id']] : null;
-                                    if ($score !== null) {
-                                        echo "<td style='text-align: center; color: red; font-weight: bold;'>$score</td>";
+                                foreach ($courses as $cId => $c) {
+                                    if (isset($stReg[$cId])) {
+                                        echo "<td style='text-align: center; color: #27ae60; font-weight: bold;'>مسجل</td>";
                                     } else {
-                                        echo "<td style='text-align: center;'>-</td>";
+                                        echo "<td style='text-align: center; color: #e74c3c; font-weight: bold; background-color: #fdf2f2;'>غير مسجل</td>";
                                     }
                                 }
+
+                                if ($isAllMissing) {
+                                    echo "<td style='text-align: center; color: #c0392b; font-weight: bold; background-color: #fee;'>غير مسجل بالفصل (" . $row['missingCount'] . "/" . $row['totalCourses'] . ")</td>";
+                                } else {
+                                    echo "<td style='text-align: center; color: #d35400; font-weight: bold;'>ناقص " . $row['missingCount'] . " من " . $row['totalCourses'] . "</td>";
+                                }
+
                                 echo "</tr>";
                                 $i++;
                             }
@@ -4508,11 +4570,11 @@ $subtitle = "";
                         }
                     }
 
-                    // Table 1: Students who failed the whole First Semester
-                    printSemesterDropoutTable($dbc, $PrgId, $YearId, 1, "الطلاب الراسبون في كامل الفصل الدراسي الأول");
+                    // Table 1: Semester 1
+                    printSemesterDropoutTable($dbc, $PrgId, $YearId, 1, "الطلاب غير المسجلين في مواد الفصل الدراسي الأول");
 
-                    // Table 2: Students who failed the whole Second Semester
-                    printSemesterDropoutTable($dbc, $PrgId, $YearId, 2, "الطلاب الراسبون في كامل الفصل الدراسي الثاني");
+                    // Table 2: Semester 2
+                    printSemesterDropoutTable($dbc, $PrgId, $YearId, 2, "الطلاب غير المسجلين في مواد الفصل الدراسي الثاني");
                 } elseif ($subMode == "nationalityStats") {
                     echo "<h4>إحصائيات جنسيات طلاب الدفعة</h4>";
 
@@ -4691,183 +4753,6 @@ $subtitle = "";
                     if (!$hasData) {
                         echo "<p style='text-align: center; color: #666;'>لا توجد بيانات طلاب في هذه الدفعة حالياً.</p>";
                     }
-                } elseif ($subMode == "unassignedCourses") {
-                    echo "<h3>كشف الطلاب غير المسجلين في مادة أو أكثر</h3>";
-                    echo "<p style='text-align: center; color: #555; margin-top: -10px; font-size: 14px;'>عرض الطلاب المقيدين بالدفعة الذين لم يتم تسجيل مادة أو أكثر لهم خلال الفصل الدراسي الأول أو الثاني</p><br>";
-
-                    if (!function_exists('printUnassignedCoursesTable')) {
-                        function printUnassignedCoursesTable($dbc, $PrgId, $YearId, $Semester, $semesterTitle)
-                        {
-                            // 1. Get required/assigned courses for this program and semester
-                            $courses = [];
-                            $q_courses = "SELECT pcs.CrsId, cg.CrsCode, cg.CrsName 
-                                          FROM programcoursesemester pcs
-                                          INNER JOIN coursesguide cg ON pcs.CrsId = cg.CrsId
-                                          WHERE pcs.PrgId = ? AND pcs.Semester = ?
-                                          ORDER BY cg.CrsCode ASC";
-                            if ($stmt = mysqli_prepare($dbc, $q_courses)) {
-                                mysqli_stmt_bind_param($stmt, "ii", $PrgId, $Semester);
-                                if (mysqli_stmt_execute($stmt)) {
-                                    mysqli_stmt_bind_result($stmt, $crsId, $crsCode, $crsName);
-                                    while (mysqli_stmt_fetch($stmt)) {
-                                        $courses[$crsId] = ['id' => $crsId, 'code' => $crsCode, 'name' => $crsName];
-                                    }
-                                }
-                                mysqli_stmt_close($stmt);
-                            }
-
-                            // Include any other courses registered in programstudentscourses for this batch/semester
-                            $q_courses_psc = "SELECT DISTINCT cg.CrsId, cg.CrsCode, cg.CrsName 
-                                              FROM programstudentscourses psc
-                                              INNER JOIN coursesguide cg ON psc.CrsId = cg.CrsId
-                                              WHERE psc.PrgId = ? AND psc.YearId = ? AND psc.Semester = ?
-                                              ORDER BY cg.CrsCode ASC";
-                            if ($stmt = mysqli_prepare($dbc, $q_courses_psc)) {
-                                mysqli_stmt_bind_param($stmt, "iii", $PrgId, $YearId, $Semester);
-                                if (mysqli_stmt_execute($stmt)) {
-                                    mysqli_stmt_bind_result($stmt, $crsId, $crsCode, $crsName);
-                                    while (mysqli_stmt_fetch($stmt)) {
-                                        if (!isset($courses[$crsId])) {
-                                            $courses[$crsId] = ['id' => $crsId, 'code' => $crsCode, 'name' => $crsName];
-                                        }
-                                    }
-                                }
-                                mysqli_stmt_close($stmt);
-                            }
-
-                            echo "<h4 style='text-align:right; margin-right:5%; color:#333; border-bottom: 2px solid #ddd; padding-bottom: 5px;'>$semesterTitle</h4>";
-
-                            if (empty($courses)) {
-                                echo "<p style='text-align:center; color:#888;'>لا توجد مواد مسجلة لهذا الفصل الدراسي.</p><br>";
-                                return;
-                            }
-
-                            // 2. Get all students assigned to this batch in ProgramStudents
-                            $students = [];
-                            $q_students = "SELECT s.StID, s.StName, ps.RegistrationNumber, s.StTels, s.StWhatsApp, co.cmpName
-                                           FROM programstudents ps
-                                           INNER JOIN students s ON ps.StId = s.StID
-                                           LEFT JOIN companies co ON s.StCompany = co.cmpId
-                                           WHERE ps.PrgId = ? AND ps.YearId = ?
-                                           ORDER BY s.StName ASC";
-                            if ($stmt = mysqli_prepare($dbc, $q_students)) {
-                                mysqli_stmt_bind_param($stmt, "ii", $PrgId, $YearId);
-                                if (mysqli_stmt_execute($stmt)) {
-                                    mysqli_stmt_bind_result($stmt, $stId, $stName, $regNum, $stTels, $stWhatsapp, $cmpName);
-                                    while (mysqli_stmt_fetch($stmt)) {
-                                        $students[] = [
-                                            'id' => $stId,
-                                            'name' => $stName,
-                                            'regNum' => $regNum,
-                                            'tels' => $stTels,
-                                            'whatsapp' => $stWhatsapp,
-                                            'company' => $cmpName
-                                        ];
-                                    }
-                                }
-                                mysqli_stmt_close($stmt);
-                            }
-
-                            if (empty($students)) {
-                                echo "<p style='text-align:center; color:#888;'>لا يوجد طلاب مقيدين في هذه الدفعة.</p><br>";
-                                return;
-                            }
-
-                            // 3. Get all course registrations for this batch & semester
-                            $registeredMap = [];
-                            $q_reg = "SELECT StId, CrsId FROM programstudentscourses 
-                                      WHERE PrgId = ? AND YearId = ? AND Semester = ?";
-                            if ($stmt = mysqli_prepare($dbc, $q_reg)) {
-                                mysqli_stmt_bind_param($stmt, "iii", $PrgId, $YearId, $Semester);
-                                if (mysqli_stmt_execute($stmt)) {
-                                    mysqli_stmt_bind_result($stmt, $regStId, $regCrsId);
-                                    while (mysqli_stmt_fetch($stmt)) {
-                                        $registeredMap[$regStId][$regCrsId] = true;
-                                    }
-                                }
-                                mysqli_stmt_close($stmt);
-                            }
-
-                            // 4. Filter students who are missing 1 or more courses in this semester
-                            $unassignedStudents = [];
-                            foreach ($students as $st) {
-                                $stReg = $registeredMap[$st['id']] ?? [];
-                                $missingCourses = [];
-                                foreach ($courses as $cId => $cData) {
-                                    if (!isset($stReg[$cId])) {
-                                        $missingCourses[] = $cData;
-                                    }
-                                }
-                                if (!empty($missingCourses)) {
-                                    $unassignedStudents[] = [
-                                        'student' => $st,
-                                        'reg' => $stReg,
-                                        'missing' => $missingCourses,
-                                        'missingCount' => count($missingCourses),
-                                        'totalCourses' => count($courses)
-                                    ];
-                                }
-                            }
-
-                            if (empty($unassignedStudents)) {
-                                echo "<p style='text-align:center; color:#27ae60; font-weight:bold;'>جميع طلاب الدفعة مسجلون في كافة مواد هذا الفصل بنجاح.</p><br>";
-                                return;
-                            }
-
-                            echo "<div style='text-align:right; margin-right:5%; margin-bottom:10px; color:#555;'>عدد الطلاب غير مكتملي التسجيل: <b style='color:#c0392b; font-size:16px;'>" . count($unassignedStudents) . "</b> طالب من إجمالي <b style='font-size:16px;'>" . count($students) . "</b></div>";
-
-                            echo "<table class='masterTable' style='width: 95%; margin: auto; direction: rtl;'>";
-                            echo "<tr class='header'>";
-                            echo "<th style='width: 4%; text-align: center;'>م</th>";
-                            echo "<th style='width: 12%; text-align: center;'>رقم التسجيل</th>";
-                            echo "<th style='width: 22%; text-align: right; padding-right: 10px;'>اسم الطالب</th>";
-                            echo "<th style='width: 12%; text-align: center;'>الهاتف</th>";
-
-                            foreach ($courses as $c) {
-                                echo "<th style='text-align: center; font-size: 13px;' title='" . htmlspecialchars($c['code'] ?? '') . "'>" . htmlspecialchars($c['name'] ?? '') . "</th>";
-                            }
-
-                            echo "<th style='width: 14%; text-align: center;'>حالة التسجيل</th>";
-                            echo "</tr>";
-
-                            $i = 1;
-                            foreach ($unassignedStudents as $row) {
-                                $st = $row['student'];
-                                $stReg = $row['reg'];
-                                $isAllMissing = ($row['missingCount'] === $row['totalCourses']);
-
-                                echo "<tr>";
-                                echo "<td style='text-align: center;'>$i</td>";
-                                echo "<td style='text-align: center; font-weight: bold;'>" . htmlspecialchars($st['regNum'] ?? '') . "</td>";
-                                echo "<td style='text-align: right; padding-right: 10px;'>" . htmlspecialchars($st['name'] ?? '') . "</td>";
-                                echo "<td style='text-align: center; direction: ltr;'>" . htmlspecialchars($st['tels'] ?? '-') . "</td>";
-
-                                foreach ($courses as $cId => $c) {
-                                    if (isset($stReg[$cId])) {
-                                        echo "<td style='text-align: center; color: #27ae60; font-weight: bold;'>مسجل</td>";
-                                    } else {
-                                        echo "<td style='text-align: center; color: #e74c3c; font-weight: bold; background-color: #fdf2f2;'>غير مسجل</td>";
-                                    }
-                                }
-
-                                if ($isAllMissing) {
-                                    echo "<td style='text-align: center; color: #c0392b; font-weight: bold; background-color: #fee;'>غير مسجل بالفصل (" . $row['missingCount'] . "/" . $row['totalCourses'] . ")</td>";
-                                } else {
-                                    echo "<td style='text-align: center; color: #d35400; font-weight: bold;'>ناقص " . $row['missingCount'] . " من " . $row['totalCourses'] . "</td>";
-                                }
-
-                                echo "</tr>";
-                                $i++;
-                            }
-                            echo "</table><br><br>";
-                        }
-                    }
-
-                    // Table 1: Semester 1
-                    printUnassignedCoursesTable($dbc, $PrgId, $YearId, 1, "الطلاب غير المسجلين في مواد الفصل الدراسي الأول");
-
-                    // Table 2: Semester 2
-                    printUnassignedCoursesTable($dbc, $PrgId, $YearId, 2, "الطلاب غير المسجلين في مواد الفصل الدراسي الثاني");
                 }
 
                 echo "</div>"; // close #divToPrint
